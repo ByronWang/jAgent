@@ -78,7 +78,7 @@ public class Cell implements Savable {
 		int count = v.readInt();
 
 		for (int i = 0; i < count; i++) {
-			Cell from = engine.getCells().get(v.readInt());
+			Cell from = engine.getCell(v.readInt());
 			Link newLink = new Link(from, this, i, (short) 1);
 			from.parents.add(newLink);
 			children.add(newLink);

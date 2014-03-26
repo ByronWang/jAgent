@@ -21,7 +21,7 @@ public class WordInstance extends CellInstance {
 	}
 
 	public final void act(Analyzer analyzer, List<CellInstance> candidate, Link l, int srcIndex) {
-		if (this.nextCandidateIndex == srcIndex && l.getConvexIndex() == this.nextConvexIndex) {
+		if (this.nextCandidateIndex == srcIndex && l.getOffset() == this.nextConvexIndex) {
 			nextConvexIndex++;
 			this.nextCandidateIndex += l.getFrom().getLength();
 
@@ -60,7 +60,7 @@ public class WordInstance extends CellInstance {
 
 	@Override
 	public WordInstance sibling(Link l) {
-		return new WordInstance(l.getTo(), signal, startFrom, l.getConvexIndex(), nextCandidateIndex);
+		return new WordInstance(l.getTo(), signal, startFrom, l.getOffset(), nextCandidateIndex);
 	}
 
 	@Override

@@ -14,7 +14,6 @@ import util.Savable;
 public class Engine implements Savable {
 	public static final int BASE_LENGTH = 0x10000;
 	AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler() {
-
 		@Override
 		public void exec(String src, List<CellInstance> candidate) {
 			// if (src.length() > 1) {
@@ -34,34 +33,36 @@ public class Engine implements Savable {
 
 	private java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(BASE_LENGTH + BASE_LENGTH);
 
-	public final java.util.ArrayList<Cell> getCells() {
-		return cells;
+	public final Cell add(Cell cell) {
+		cell.index = cells.size();
+		cells.add(cell);
+		return cell;
+	}
+
+	public final void clear() {
+		// clear list
+		cells.clear();
+
+		for (int i = 0; i < BASE_LENGTH; i++) {
+			cells.add(new CharCell(i));
+		}
+	}
+
+	public final Cell find(String sample) {
+
+		Analyzer a = Analyzer.Instance(this).run(sample);
+		if (!a.isFresh()) {
+			return a.getCell();
+		}
+		return null;
 	}
 
 	public final Cell getCell(int index) {
 		return cells.get(index);
 	}
 
-	public final void setItem(int index, Cell value) {
-		cells.set(index, value);
-	}
-
-	public final int getLength() {
+	public final int size() {
 		return this.cells.size();
-	}
-
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Savable Members
-
-	public void save(Engine engine, DataWriter v) throws IOException {
-		// all cell count
-		v.save(cells.size() - BASE_LENGTH);
-		v.clearWrite();
-
-		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
-			((Savable) cells.get(i)).save(engine, v);
-		}
-
 	}
 
 	public void load(Engine engine, DateReader r) throws IOException {
@@ -87,34 +88,25 @@ public class Engine implements Savable {
 
 	}
 
-	public final void clear() {
-		// clear list
-		cells.clear();
+//	public final Cell newCell() {
+//		Cell cell = new Cell(cells.size());
+//		cells.add(cell);
+//		return cell;
+//	}
 
-		for (int i = 0; i < BASE_LENGTH; i++) {
-			cells.add(new CharCell(i));
+	public void save(Engine engine, DataWriter v) throws IOException {
+		// all cell count
+		v.save(cells.size() - BASE_LENGTH);
+		v.clearWrite();
+
+		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
+			((Savable) cells.get(i)).save(engine, v);
 		}
+
 	}
 
-	public final Cell newCell() {
-		Cell cell = new Cell(cells.size());
-		cells.add(cell);
-		return cell;
-	}
-
-	public final void trainNew(String sample) {
-		Analyzer a = Analyzer.Instance(this);
-		a.getAnalyzerListen().add(analyzerListenHandler);
-		a.runAndAdd(sample);
-	}
-
-	public final Cell find(String sample) {
-
-		Analyzer a = Analyzer.Instance(this).run(sample);
-		if (!a.isFresh()) {
-			return a.getCell();
-		}
-		return null;
+	public final void setCell(int index, Cell value) {
+		cells.set(index, value);
 	}
 
 	// List<CellInstance> march(List<CellInstance> activeList)
@@ -186,10 +178,10 @@ public class Engine implements Savable {
 	// return newls;
 	// }
 
-	public final Cell add(Cell cell) {
-		cell.index = cells.size();
-		cells.add(cell);
-		return cell;
+	public final void trainNew(String sample) {
+		Analyzer a = Analyzer.Instance(this);
+		a.getAnalyzerListen().add(analyzerListenHandler);
+		a.runAndAdd(sample);
 	}
 
 }

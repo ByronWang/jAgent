@@ -14,7 +14,7 @@ import util.PersisterTextReaderWriter;
 import junit.framework.TestCase;
 
 public class EngineImpTest extends TestCase {
-	IEngine engine;
+	Engine engine;
 	String folder = "";
 	String fileSimpleName = "matrix.txt";
 
@@ -88,7 +88,7 @@ public class EngineImpTest extends TestCase {
 	}
 
 	private void dataRefresh() {
-		java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(engine.getCells().size());
+//		java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(engine.getCells().size());
 
 //		for (int i = 0; i < 0x10000; i++) {
 //			if (engine.getCells().get(i).getConcave().size() > 0) {

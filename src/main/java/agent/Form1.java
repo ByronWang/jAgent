@@ -6,13 +6,13 @@ import agent.model.*;
 
 public class Form1 extends Form
 {
-	private IEngine engine = new Engine();
+	private Engine engine = new Engine();
 
 	public Form1()
 	{
 		InitializeComponent();
 		this.Cursor = Cursors.WaitCursor;
-		IEngine newEngine = new Engine();
+		Engine newEngine = new Engine();
 		String filename = this.txtFolder.getText() + this.txtFilename.getText();
 		if (File.Exists(filename))
 		{
@@ -26,7 +26,7 @@ public class Form1 extends Form
 
 	private void btnBrowse_Click(Object sender, EventArgs e)
 	{
-		if(this.txtFolder.getText().getLength() == 0)
+		if(this.txtFolder.getText().size() == 0)
 		{
 			folderBrowserDialog1.SelectedPath=this.txtFolder.getText();
 		}
@@ -39,7 +39,7 @@ public class Form1 extends Form
 	private void btnLoad_Click(Object sender, EventArgs e)
 	{
 		this.Cursor = Cursors.WaitCursor;
-		IEngine newEngine = new Engine();
+		Engine newEngine = new Engine();
 		String filename = this.txtFolder.getText() + this.txtFilename.getText();
 		if (File.Exists(filename))
 		{

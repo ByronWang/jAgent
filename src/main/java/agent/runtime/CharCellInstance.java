@@ -14,7 +14,7 @@ public class CharCellInstance extends CellInstance
 	@Override
 	public WordInstance sibling(Link l)
 	{
-		return new WordInstance(l.getTo(), signal, startFrom, l.getConvexIndex(), startFrom + 1);
+		return new WordInstance(l.getTo(), signal, startFrom, l.getOffset(), startFrom + 1);
 	}
 
 	@Override

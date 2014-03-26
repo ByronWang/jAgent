@@ -20,7 +20,7 @@ public abstract class CellInstance {
 
 	public final void succeed(Analyzer analyzer, List<CellInstance> candidate) {
 		for (Link link : cell.getParents()) {
-			if (link.getConvexIndex() > 0) {
+			if (link.getOffset() > 0) {
 				WordInstance w = analyzer.getItem(link.getTo().index);
 				if (w != null) {
 					w.act(analyzer, candidate, link, this.startFrom); // ?????
@@ -31,7 +31,7 @@ public abstract class CellInstance {
 		}
 
 		for (Link link : cell.getParents()) {
-			if (link.getConvexIndex() == 0) {
+			if (link.getOffset() == 0) {
 				if (link.getTo().getLength() > 1) {
 					analyzer.setItem(link.getTo().index, this.sibling(link));
 				} else {

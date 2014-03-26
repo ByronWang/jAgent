@@ -1,12 +1,6 @@
 package agent.model;
 
-import java.io.IOException;
-
-import util.DataWriter;
-import util.DateReader;
-import util.Savable;
-
-public class Link implements Savable {
+public class Link {
 	private short weight = 0;
 	private Cell from = null;
 	private Cell to = null;
@@ -36,30 +30,12 @@ public class Link implements Savable {
 		from = value;
 	}
 
-	public final int getConvexIndex() {
+	public final int getOffset() {
 		return offset;
-	}
-
-	public final void setConvexIndex(int value) {
-		offset = value;
 	}
 
 	public final short getWeight() {
 		return weight;
-	}
-
-	public final void setWeight(short value) {
-		weight = value;
-	}
-
-	public void save(Engine engine, DataWriter v) throws IOException {
-		// v.save(strength);
-//		v.save(from.index);
-	}
-
-	public void load(Engine engine, DateReader v) throws IOException {
-		// strength = v.readShort();
-//		from = engine.getCells().get(v.readInt());
 	}
 
 	@Override
