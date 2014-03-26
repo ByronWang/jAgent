@@ -3,12 +3,11 @@ package agent.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
-import agent.model.Analyzer;
 import agent.model.Cell;
 import agent.model.Engine;
 
 
-public class RunnableInstance implements Analyzer {
+public class AATT {
 	protected Cell cell = null;
 
 	public final Cell getCell() {
@@ -93,16 +92,16 @@ public class RunnableInstance implements Analyzer {
 	// }
 	// }
 
-	private RunnableInstance(Engine engine) {
+	private AATT(Engine engine) {
 		this.engine = engine;
 	}
 
-	public static Analyzer Instance(Engine engine) {
-		RunnableInstance a = new RunnableInstance(engine);
+	public static AATT Instance(Engine engine) {
+		AATT a = new AATT(engine);
 		return a;
 	}
 
-	public final Analyzer run(String sample) {
+	public final AATT run(String sample) {
 		signal = SIGNAL_SEED++;
 		// if (sample.StartsWith("�K�v���K�v"))
 		// {
@@ -197,7 +196,7 @@ public class RunnableInstance implements Analyzer {
 		// oldCell.addTos(newLink);
 	}
 
-	public final Analyzer runAndAdd(String sample) {
+	public final AATT runAndAdd(String sample) {
 		this.run(sample);
 		this.add();
 		return this;

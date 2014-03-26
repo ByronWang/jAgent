@@ -2,7 +2,7 @@ package agent.model;
 
 import java.io.IOException;
 
-import agent.runtime.RunnableInstance;
+import agent.runtime.AATT;
 
 import util.Savable;
 import util.TypeReader;
@@ -98,14 +98,14 @@ public class EngineImp implements Engine, Savable {
 	}
 
 	public final void trainNew(String sample) {
-		Analyzer a = RunnableInstance.Instance(this);
+		AATT a = AATT.Instance(this);
 //		a.getAnalyzerListen().add(analyzerListenHandler);
 		a.runAndAdd(sample);
 	}
 
 	public final Cell find(String sample) {
 
-		Analyzer a = RunnableInstance.Instance(this).run(sample);
+		AATT a = AATT.Instance(this).run(sample);
 		if (!a.isFresh()) {
 			return a.getCell();
 		}
