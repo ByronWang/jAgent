@@ -9,7 +9,7 @@ public class WordInstance extends CellInstance
 {
 	public int nextCandidateIndex;
 	private int nextConvexIndex;
-	private int convexStartIndex;
+	private int offset;
 
 	private WordInstance next = null;
 	private WordInstance previous = null;
@@ -30,40 +30,40 @@ public class WordInstance extends CellInstance
 		return previous;
 	}
 
-	public WordInstance(Cell cell, long signal, int startFrom, int convexIndex, int nextCandidateIndex)
+	public WordInstance(Cell cell, long signal, int indexFrom, int offset, int nextCandidateIndex)
 	{
-		super(cell, signal, startFrom);
-		this.convexStartIndex = convexIndex;
-		this.nextConvexIndex = convexIndex + 1;
+		super(cell, signal, indexFrom);
+		this.offset = offset;
+		this.nextConvexIndex = offset + 1;
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Analyzer analyzer, List<CellInstance> buffer, Link l, int srcIndex)
+	public final void act(Analyzer analyzer, List<CellInstance> buffer, Link l, int curIndex)
 	{
-		if (this.nextCandidateIndex == srcIndex && l.getOffset() == this.nextConvexIndex)
+		if (this.nextCandidateIndex == curIndex && l.getOffset() == this.nextConvexIndex)
 		{
 			nextConvexIndex++;
 			this.nextCandidateIndex += l.getFrom().getLength();
 
 			// succeed
-			if (this.convexStartIndex == 0 && nextConvexIndex == this.cell.getConvex().size())
+			if (this.offset == 0 && nextConvexIndex == this.cell.getConvex().size())
 			{
-				buffer.set(this.startFrom, this);
+				buffer.set(this.indexFrom, this);
 				analyzer.setItem(this.cell.index, null);
 				this.activate(analyzer, buffer);
 			}
 		}
 		if (this.getNext() != null)
 		{
-			this.getNext().act(analyzer, buffer, l, srcIndex);
+			this.getNext().act(analyzer, buffer, l, curIndex);
 		}
 	}
 
 	public final void die(Analyzer analyzer)
 	{
-		if (nextConvexIndex - convexStartIndex > 1)
+		if (nextConvexIndex - offset > 1)
 		{
-			analyzer.reasign(this.cell, convexStartIndex, nextConvexIndex);
+			analyzer.reasign(this.cell, offset, nextConvexIndex);
 		}
 	}
 
@@ -75,6 +75,6 @@ public class WordInstance extends CellInstance
 	@Override
 	public WordInstance sibling(Link l)
 	{
-		return new WordInstance(l.getTo(), signal, startFrom, l.getOffset(), nextCandidateIndex);
+		return new WordInstance(l.getTo(), signal, indexFrom, l.getOffset(), nextCandidateIndex);
 	}
 }

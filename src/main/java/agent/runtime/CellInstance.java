@@ -13,13 +13,13 @@ public abstract class CellInstance
 		return cell;
 	}
 	public long signal;
-	public int startFrom;
+	public int indexFrom;
 
 	public CellInstance(Cell cell, long signal, int index)
 	{
 		this.cell = cell;
 		this.signal = signal;
-		this.startFrom = index;
+		this.indexFrom = index;
 	}
 
 	public final void activate(Analyzer analyzer, List<CellInstance> buffer)
@@ -29,9 +29,9 @@ public abstract class CellInstance
 			if (link.getOffset() > 0)
 			{
 				WordInstance w = analyzer.getItem(link.getTo().index);
-				if (w != null) // 如果已经激活
+				if (w != null) // 如果已经激活,确认是否匹配成功
 				{
-					w.act(analyzer, buffer, link, this.startFrom); // ?????
+					w.act(analyzer, buffer, link, this.indexFrom); // ?????
 				}
 				else
 				{
@@ -51,7 +51,7 @@ public abstract class CellInstance
 				else
 				{
 					WordInstance w = this.sibling(link);
-					buffer.set(this.startFrom, w);
+					buffer.set(this.indexFrom, w);
 					w.activate(analyzer, buffer);
 				}
 			}
