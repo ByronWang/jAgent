@@ -5,6 +5,8 @@ import java.util.List;
 
 import agent.model.Cell;
 import agent.model.Engine;
+import agent.model.Sentence;
+import agent.model.Word;
 
 public class Context {
 	public static void trainNew(Engine engine, String sample) {
@@ -147,7 +149,7 @@ public class Context {
 		if (indexTo - indexFrom == 1) {
 			return buffer.get(indexFrom).value();
 		} else {
-			Cell newWord = new Cell();
+			Cell newWord = new Word();
 			for (int j = indexFrom; j < indexTo;) {
 				Cell sc = buffer.get(j).value();
 				newWord.comeFrom(sc);
@@ -159,7 +161,7 @@ public class Context {
 	}
 
 	private Cell add() {
-		cell = new Cell();
+		cell = new Sentence();
 		for (int j = 0; j < buffer.size();) {
 			Cell sc = buffer.get(j).value();
 			cell.comeFrom(sc);
