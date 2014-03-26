@@ -2,7 +2,7 @@ package util;
 
 import java.io.IOException;
 
-public interface DateReader {
+public interface TypeReader {
 	String readString() throws IOException;
 
 	int readInt() throws IOException;

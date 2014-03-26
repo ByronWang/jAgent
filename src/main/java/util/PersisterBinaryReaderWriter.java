@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 
 import agent.model.Engine;
 
-public class PersisterBinaryReaderWriter implements DateReader, DataWriter {
+public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 
 	public static void save(String filename, Engine engine) {
 		new PersisterBinaryReaderWriter().doSave(filename, engine);
@@ -43,7 +43,7 @@ public class PersisterBinaryReaderWriter implements DateReader, DataWriter {
 	public void doLoad(String filename, Engine engine) {
 		try {
 			this.r = new FileInputStream(filename);
-			((DateReader) this).clearReader();
+			((TypeReader) this).clearReader();
 			((Savable) engine).load(engine, this);
 
 			this.r.close();

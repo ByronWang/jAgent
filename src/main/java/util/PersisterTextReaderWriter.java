@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 
 import agent.model.Engine;
 
-public class PersisterTextReaderWriter implements DateReader, DataWriter {
+public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 	public static char SEPERATOR = ';';
 
 	public static void save(String filename, Engine engine) {
@@ -47,7 +47,7 @@ public class PersisterTextReaderWriter implements DateReader, DataWriter {
 	public void doLoad(String filename, Engine engine) {
 		try {
 			this.r = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "utf-8"));
-			((DateReader) this).clearReader();
+			((TypeReader) this).clearReader();
 			((Savable) engine).load(engine, this);
 
 			this.r.close();

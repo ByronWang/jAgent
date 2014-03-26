@@ -2,7 +2,7 @@ package util;
 
 import java.io.IOException;
 
-public interface DataWriter {
+public interface TypeWriter {
 	void save(String v) throws IOException;
 
 	void save(int v) throws IOException;
