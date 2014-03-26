@@ -1,8 +1,10 @@
 package agent.model;
 
 public class CharCell extends Cell {
+	public int valueIndex = 0;
+	
 	public CharCell(int index) {
-		super(index);
+		this.valueIndex = index;
 	}
 
 	@Override
@@ -11,7 +13,7 @@ public class CharCell extends Cell {
 	}
 
 	@Override
-	public String getValue() {
-		return Character.toString((char) index);
+	public String toString() {
+		return Character.toString((char) valueIndex);
 	}
 }

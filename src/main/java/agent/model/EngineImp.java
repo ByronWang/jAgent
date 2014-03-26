@@ -68,14 +68,14 @@ public class EngineImp implements Engine, Savable {
 		r.clearReader();
 
 		for (int i = BASE_LENGTH; i < count; i++) {
-			cells.add(new Cell(i));
+			cells.add(new CharCell(i));
 		}
 		for (int i = BASE_LENGTH; i < count; i++) {
 			((Savable) cells.get(i)).load(engine, r);
 		}
 
 		for (int i = BASE_LENGTH; i < count; i++) {
-			for (Link link : cells.get(i).getConvex()) {
+			for (Link link : cells.get(i).getChildren()) {
 				link.from.getParents().add(link);
 			}
 		}
@@ -91,11 +91,11 @@ public class EngineImp implements Engine, Savable {
 		}
 	}
 
-	public final Cell newCell() {
-		Cell cell = new Cell(cells.size());
-		cells.add(cell);
-		return cell;
-	}
+//	public final Cell newCell() {
+//		Cell cell = new CharCell(cells.size());
+//		cells.add(cell);
+//		return cell;
+//	}
 
 	public final void trainNew(String sample) {
 		Analyzer.trainNew(this, sample);
@@ -180,7 +180,7 @@ public class EngineImp implements Engine, Savable {
 	// }
 
 	public final Cell add(Cell cell) {
-		cell.index = cells.size();
+		cell.valueIndex = cells.size();
 		cells.add(cell);
 		return cell;
 	}

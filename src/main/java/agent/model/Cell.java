@@ -6,34 +6,10 @@ import util.Savable;
 import util.TypeReader;
 import util.TypeWriter;
 
-
 public class Cell implements Savable {
+	public int valueIndex = -1;
+
 	public Cell() {
-	}
-
-	public Cell(int index) {
-		this.index = index;
-	}
-
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Access
-
-	public final Cell getItem(int index) {
-		if (this.children.size() > 0) {
-			int i = index;
-			for (Link l : this.children) {
-				Cell cell = l.from;
-				if (cell.getLength() > i) {
-					return cell.getItem(i);
-				} else {
-					i -= cell.getLength();
-				}
-
-			}
-		} else if (index == 0) {
-			return this;
-		}
-		return null;
 	}
 
 	public int getLength() {
@@ -44,10 +20,9 @@ public class Cell implements Savable {
 		return length;
 	}
 
-	public int index = 0;
 	private java.util.ArrayList<Link> children = new java.util.ArrayList<Link>();
 
-	public final java.util.ArrayList<Link> getConvex() {
+	public final java.util.ArrayList<Link> getChildren() {
 		return children;
 	}
 
@@ -57,22 +32,8 @@ public class Cell implements Savable {
 		return parents;
 	}
 
-	public String getValue() {
-		String s = "";
-		for (Link l : this.children) {
-			s += l.from.getValue();
-		}
-		return s;
-	}
-
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#endregion
-
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Savable Members
-
 	public void save(Engine engine, TypeWriter v) throws IOException {
-		v.save(this.getValue());
+		v.save(this.toString());
 
 		// convex
 		v.save(children.size());
@@ -90,36 +51,23 @@ public class Cell implements Savable {
 
 		for (int i = 0; i < count; i++) {
 			Link l = new Link();
-			l.to=this;
-			l.offset=i;
+			l.to = this;
+			l.offset = i;
 			((Savable) l).load(engine, v);
 			children.add(l);
 		}
 		v.clearReader();
 	}
 
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#endregion
-
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Logic
-
-	public final void addTos(Link link) {
-		// for (int i = 0; i < concave.Count; i++)
-		// {
-		// if(link.ConvexIndex < concave[i].ConvexIndex || link.ConvexIndex
-		// }
-		this.parents.add(link);
-	}
-
-	public final Cell comeFrom(Cell cell) {
+	public final Cell comeFrom(Cell child) {
 		Link newLink = new Link();
+		newLink.from = child;
+		newLink.to = this;
+		newLink.offset = this.children.size();
+		newLink.weight = (short) 1;
+
 		this.children.add(newLink);
-		newLink.from=cell;
-		newLink.to=this;
-		newLink.offset=this.children.size() - 1;
-		newLink.weight=(short) 1;
-		cell.addTos(newLink);
+		child.parents.add(newLink);
 		// cell.reinforce();
 
 		return this;
@@ -132,11 +80,29 @@ public class Cell implements Savable {
 		return this;
 	}
 
-	@Override
 	public String toString() {
-		return this.getValue() + " . " + this.parents.size();
+		String s = "";
+		for (Link l : this.children) {
+			s += l.from.toString();
+		}
+		return s;
 	}
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#endregion
 
+	// public final Cell getChild(int index) {
+	// if (this.children.size() > 0) {
+	// int i = index;
+	// for (Link l : this.children) {
+	// Cell cell = l.from;
+	// if (cell.getLength() > i) {
+	// return cell.getChild(i);
+	// } else {
+	// i -= cell.getLength();
+	// }
+	//
+	// }
+	// } else if (index == 0) {
+	// return this;
+	// }
+	// return null;
+	// }
 }

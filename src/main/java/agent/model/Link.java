@@ -22,7 +22,7 @@ public class Link implements Savable
 	public void save(Engine engine, TypeWriter v) throws IOException
 	{
 		//v.save(strength);
-		v.save(from.index);
+		v.save(from.valueIndex);
 	}
 
 	public void load(Engine engine, TypeReader v) throws IOException

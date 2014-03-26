@@ -5,30 +5,30 @@ import java.util.List;
 import agent.model.Cell;
 import agent.model.Link;
 
-public abstract class CellInstance
+public abstract class ActivatedCell
 {
-	protected Cell cell = null;
-	public final Cell getCell()
+	protected Cell value = null;
+	public final Cell value()
 	{
-		return cell;
+		return value;
 	}
 	public long signal;
 	public int indexFrom;
 
-	public CellInstance(Cell cell, long signal, int index)
+	public ActivatedCell(Cell value, long signal, int index)
 	{
-		this.cell = cell;
+		this.value = value;
 		this.signal = signal;
 		this.indexFrom = index;
 	}
 
-	public final void activate(Analyzer analyzer, List<CellInstance> buffer)
+	public final void activate(Analyzer analyzer, List<ActivatedCell> buffer)
 	{
-		for (Link link : cell.getParents())
+		for (Link link : value.getParents())
 		{
 			if (link.offset > 0)
 			{
-				WordInstance w = analyzer.getItem(link.to.index);
+				ActivatedWord w = analyzer.getItem(link.to.valueIndex);
 				if (w != null) // 如果已经激活,确认是否匹配成功
 				{
 					w.act(analyzer, buffer, link, this.indexFrom); // ?????
@@ -40,17 +40,17 @@ public abstract class CellInstance
 			}
 		}
 
-		for (Link link : cell.getParents())
+		for (Link link : value.getParents())
 		{
 			if (link.offset == 0)
 			{
 				if (link.to.getLength() > 1)
 				{
-					analyzer.setItem(link.to.index, this.sibling(link));
+					analyzer.setItem(link.to.valueIndex, this.sibling(link));
 				}
 				else
 				{
-					WordInstance w = this.sibling(link);
+					ActivatedWord w = this.sibling(link);
 					buffer.set(this.indexFrom, w);
 					w.activate(analyzer, buffer);
 				}
@@ -61,10 +61,10 @@ public abstract class CellInstance
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#endregion
 
-	public abstract WordInstance sibling(Link l);
+	public abstract ActivatedWord sibling(Link l);
 	@Override
 	public String toString()
 	{
-		return this.getCell().getValue().toString() + " : ";
+		return this.value().toString().toString() + " : ";
 	}
 }

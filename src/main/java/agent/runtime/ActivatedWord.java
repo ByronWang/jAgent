@@ -5,19 +5,19 @@ import java.util.List;
 import agent.model.Cell;
 import agent.model.Link;
 
-public class WordInstance extends CellInstance
+public class ActivatedWord extends ActivatedCell
 {
 	public int nextCandidateIndex;
 	private int nextConvexIndex;
 	private int offset;
 
-	private WordInstance next = null;
-	private WordInstance previous = null;
-	public final WordInstance getNext()
+	private ActivatedWord next = null;
+	private ActivatedWord previous = null;
+	public final ActivatedWord getNext()
 	{
 		return next;
 	}
-	public final void setNext(WordInstance value)
+	public final void setNext(ActivatedWord value)
 	{
 		next = value;
 		if(value !=null)
@@ -25,12 +25,12 @@ public class WordInstance extends CellInstance
 			value.previous = this;
 		}
 	}
-	public final WordInstance getPrevious()
+	public final ActivatedWord getPrevious()
 	{
 		return previous;
 	}
 
-	public WordInstance(Cell cell, long signal, int indexFrom, int offset, int nextCandidateIndex)
+	public ActivatedWord(Cell cell, long signal, int indexFrom, int offset, int nextCandidateIndex)
 	{
 		super(cell, signal, indexFrom);
 		this.offset = offset;
@@ -38,7 +38,7 @@ public class WordInstance extends CellInstance
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Analyzer analyzer, List<CellInstance> buffer, Link l, int curIndex)
+	public final void act(Analyzer analyzer, List<ActivatedCell> buffer, Link l, int curIndex)
 	{
 		if (this.nextCandidateIndex == curIndex && l.offset == this.nextConvexIndex)
 		{
@@ -46,10 +46,10 @@ public class WordInstance extends CellInstance
 			this.nextCandidateIndex += l.from.getLength();
 
 			// succeed
-			if (this.offset == 0 && nextConvexIndex == this.cell.getConvex().size())
+			if (this.offset == 0 && nextConvexIndex == this.value.getChildren().size())
 			{
 				buffer.set(this.indexFrom, this);
-				analyzer.setItem(this.cell.index, null);
+				analyzer.setItem(this.value.valueIndex, null);
 				this.activate(analyzer, buffer);
 			}
 		}
@@ -63,18 +63,18 @@ public class WordInstance extends CellInstance
 	{
 		if (nextConvexIndex - offset > 1)
 		{
-			analyzer.reasign(this.cell, offset, nextConvexIndex);
+			analyzer.reasign(this.value, offset, nextConvexIndex);
 		}
 	}
 
 	@Override
 	public String toString()
 	{
-		return this.getCell().getValue().toString() + " : " + this.nextConvexIndex;
+		return this.value().toString().toString() + " : " + this.nextConvexIndex;
 	}
 	@Override
-	public WordInstance sibling(Link l)
+	public ActivatedWord sibling(Link l)
 	{
-		return new WordInstance(l.to, signal, indexFrom, l.offset, nextCandidateIndex);
+		return new ActivatedWord(l.to, signal, indexFrom, l.offset, nextCandidateIndex);
 	}
 }
