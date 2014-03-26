@@ -128,12 +128,6 @@ public class Context {
 			charCell.activate(this, buffer);
 
 			// checkDead(i);
-
-			// contextListenHandler temp = this.contextListen;
-			// if (temp != null)
-			// {
-			// temp.exec(sample, candidate);
-			// }
 		}
 		if (startIndex > 0 && buffer.size() - startIndex > 1 && buffer.get(startIndex).value().getLength() < buffer.size() - startIndex) {
 			Cell cell = createWord(buffer, startIndex, buffer.size());
