@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import util.PersisterBinaryReaderWriter;
+
 import junit.framework.TestCase;
 
 public class PersisterBinaryReaderWriterTest extends TestCase {

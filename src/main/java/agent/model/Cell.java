@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Savable;
+
 public class Cell implements Savable {
 	private List<Link> concave = new ArrayList<Link>();
 	private List<Link> convex = new ArrayList<Link>();

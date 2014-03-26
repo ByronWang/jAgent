@@ -2,6 +2,8 @@ package agent.model;
 
 import java.io.IOException;
 
+import util.Savable;
+
 public class Link implements Savable {
 	private short weight = 0;
 	private Cell from = null;

@@ -1,4 +1,4 @@
-package agent.model;
+package util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+
+import agent.model.DataWriter;
+import agent.model.DateReader;
+import agent.model.Engine;
 
 public class PersisterTextReaderWriter implements DateReader, DataWriter {
 	public static char SEPERATOR = ';';

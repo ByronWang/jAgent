@@ -1,4 +1,4 @@
-package agent.model;
+package util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+
+import agent.model.DataWriter;
+import agent.model.DateReader;
+import agent.model.Engine;
 
 public class PersisterBinaryReaderWriter implements DateReader, DataWriter {
 

@@ -1,4 +1,4 @@
-package agent.model;
+package util;
 
 public class Performance {
 	private long startTime;

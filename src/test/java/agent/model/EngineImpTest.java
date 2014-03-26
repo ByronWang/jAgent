@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import util.Performance;
+import util.PersisterTextReaderWriter;
+
 import junit.framework.TestCase;
 
 public class EngineImpTest extends TestCase {

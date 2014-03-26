@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import util.AnalyzerListenHandler;
+import util.Savable;
 
 public class EngineImp implements Engine, Savable {
 	public static final int BASE_LENGTH = 0x10000;

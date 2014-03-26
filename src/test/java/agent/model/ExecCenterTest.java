@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
+import util.Performance;
+import util.PersisterBinaryReaderWriter;
+import util.PersisterTextReaderWriter;
+
 import junit.framework.TestCase;
 
 //public class EngineImpTest extends TestCase {
@@ -117,6 +121,12 @@ public class ExecCenterTest extends TestCase {
 		this.dataRefresh();
 		PersisterTextReaderWriter.save(path + fileSimpleName + ".txt", engine);
 		PersisterBinaryReaderWriter.save(path + fileSimpleName + ".bin", engine);
+		engine.clear();
+
+		PersisterBinaryReaderWriter.load(path + fileSimpleName + ".bin", engine);
+		
+		PersisterTextReaderWriter.save(path + fileSimpleName + "2.txt", engine);
+		PersisterBinaryReaderWriter.save(path + fileSimpleName + "2.bin", engine);
 	}
 
 	// public void txtFindText_KeyUp(Object sender, KeyEventArgs e)
