@@ -1,8 +1,9 @@
 package util;
 
-import agent.model.Candidator;
+import java.util.List;
+
 import agent.model.CellInstance;
 
 public interface AnalyzerListenHandler {
-	void exec(String src, Candidator<CellInstance> candidate);
+	void exec(String src, List<CellInstance> candidate);
 }

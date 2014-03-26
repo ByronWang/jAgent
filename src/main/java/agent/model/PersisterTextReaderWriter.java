@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
-public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
+public class PersisterTextReaderWriter implements DateReader, DataWriter {
 	public static char SEPERATOR = ';';
 
 	public static void save(String filename, Engine engine) {
@@ -45,7 +45,7 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 	public void doLoad(String filename, Engine engine) {
 		try {
 			this.r = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "utf-8"));
-			((TypeReader) this).clearReader();
+			((DateReader) this).clearReader();
 			((Savable) engine).load(engine, this);
 
 			this.r.close();

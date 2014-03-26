@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-public class PersisterBinaryReaderWriter implements TypeReader,TypeWriter
+public class PersisterBinaryReaderWriter implements DateReader,DataWriter
 {
 	
 	public static void save(String filename, Engine engine)
@@ -45,7 +45,7 @@ public class PersisterBinaryReaderWriter implements TypeReader,TypeWriter
 	{
 		try {
 			this.r = new FileInputStream(filename);
-			((TypeReader)this).clearReader();
+			((DateReader)this).clearReader();
 			((Savable)engine).load(engine, this);
 
 			this.r.close();

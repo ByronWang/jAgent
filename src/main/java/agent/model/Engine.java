@@ -16,7 +16,7 @@ public interface Engine {
 
 	int getLength();
 
-	Cell getItem(int index);
+	Cell getCell(int index);
 
 	void setItem(int index, Cell value);
 }

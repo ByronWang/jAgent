@@ -85,7 +85,7 @@ public class Form1 extends Form
 
 		Cell[] ca = cells.toArray(new Cell[]{});
 
-		lstCells.Items.Clear();
+		lstCells.Items.clear();
 		lstCells.Items.AddRange(ca);
 
 		//this.splitContainer2.Panel1.SuspendLayout();
@@ -432,12 +432,12 @@ public class Form1 extends Form
 		// 
 		// splitContainer2.Panel1
 		// 
-		this.splitContainer2.Panel1.Controls.Add(this.lstCells);
+		this.splitContainer2.Panel1.Controls.add(this.lstCells);
 		// 
 		// splitContainer2.Panel2
 		// 
 		this.splitContainer2.Panel2.setBackColor(System.Drawing.SystemColors.ControlLightLight);
-		this.splitContainer2.Panel2.Controls.Add(this.engineView);
+		this.splitContainer2.Panel2.Controls.add(this.engineView);
 		this.splitContainer2.Size = new System.Drawing.Size(915, 425);
 		this.splitContainer2.SplitterDistance = 237;
 		this.splitContainer2.TabIndex = 15;
@@ -463,19 +463,19 @@ public class Form1 extends Form
 		// 
 		// panel1
 		// 
-		this.panel1.Controls.Add(this.txtFindText);
-		this.panel1.Controls.Add(this.btnTrainNew);
-		this.panel1.Controls.Add(this.txtTrainNew);
-		this.panel1.Controls.Add(this.btnCreateData);
-		this.panel1.Controls.Add(this.btnLoad);
-		this.panel1.Controls.Add(this.btnSave);
-		this.panel1.Controls.Add(this.btnLoadTrainData);
-		this.panel1.Controls.Add(this.txtFolder);
-		this.panel1.Controls.Add(this.label3);
-		this.panel1.Controls.Add(this.txtFilename);
-		this.panel1.Controls.Add(this.txtTrainData);
-		this.panel1.Controls.Add(this.label1);
-		this.panel1.Controls.Add(this.btnBrowse);
+		this.panel1.Controls.add(this.txtFindText);
+		this.panel1.Controls.add(this.btnTrainNew);
+		this.panel1.Controls.add(this.txtTrainNew);
+		this.panel1.Controls.add(this.btnCreateData);
+		this.panel1.Controls.add(this.btnLoad);
+		this.panel1.Controls.add(this.btnSave);
+		this.panel1.Controls.add(this.btnLoadTrainData);
+		this.panel1.Controls.add(this.txtFolder);
+		this.panel1.Controls.add(this.label3);
+		this.panel1.Controls.add(this.txtFilename);
+		this.panel1.Controls.add(this.txtTrainData);
+		this.panel1.Controls.add(this.label1);
+		this.panel1.Controls.add(this.btnBrowse);
 		this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 		this.panel1.setLocation(new System.Drawing.Point(0, 0));
 		this.panel1.setName("panel1");
@@ -527,8 +527,8 @@ public class Form1 extends Form
 		this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 		this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 		this.ClientSize = new System.Drawing.Size(915, 516);
-		this.Controls.Add(this.splitContainer2);
-		this.Controls.Add(this.panel1);
+		this.Controls.add(this.splitContainer2);
+		this.Controls.add(this.panel1);
 		this.setName("Form1");
 		this.setText("Form1");
 //C# TO JAVA CONVERTER TODO TASK: Java has no equivalent to C#-style event wireups:

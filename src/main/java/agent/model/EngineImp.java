@@ -1,6 +1,7 @@
 package agent.model;
 
 import java.io.IOException;
+import java.util.List;
 
 import util.AnalyzerListenHandler;
 
@@ -9,17 +10,19 @@ public class EngineImp implements Engine, Savable {
 	AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler() {
 
 		@Override
-		public void exec(String src, Candidator<CellInstance> candidate) {
-			if (src.length() > 10) {
-				StringBuilder sb = new StringBuilder();
-				for (CellInstance ci : candidate) {
-					sb.append("[");
-					sb.append(ci.getCell().getValue());
-					sb.append("]");
-				}
-				System.out.println(sb.toString());
-			}
-
+		public void exec(String src, List<CellInstance> candidate) {
+//			if (src.length() > 1) {
+//				StringBuilder sb = new StringBuilder();
+//				for (int i = 0; i < candidate.length;) {
+//					CellInstance ci = candidate[i];
+//					if (ci == null) break;
+//					sb.append("[");
+//					sb.append(ci.cell.getValue());
+//					sb.append("]");
+//					i += ci.cell.getLength();
+//				}
+//				System.out.println(sb.toString());
+//			}
 		}
 	};
 
@@ -29,7 +32,7 @@ public class EngineImp implements Engine, Savable {
 		return cells;
 	}
 
-	public final Cell getItem(int index) {
+	public final Cell getCell(int index) {
 		return cells.get(index);
 	}
 
@@ -44,7 +47,7 @@ public class EngineImp implements Engine, Savable {
 	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 	// /#region Savable Members
 
-	public void save(Engine engine, TypeWriter v) throws IOException {
+	public void save(Engine engine, DataWriter v) throws IOException {
 		// all cell count
 		v.save(cells.size() - BASE_LENGTH);
 		v.clearWrite();
@@ -55,7 +58,7 @@ public class EngineImp implements Engine, Savable {
 
 	}
 
-	public void load(Engine engine, TypeReader r) throws IOException {
+	public void load(Engine engine, DateReader r) throws IOException {
 
 		this.clear();
 

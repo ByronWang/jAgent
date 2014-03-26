@@ -6,18 +6,11 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import agent.model.Cell;
-import agent.model.Engine;
-import agent.model.EngineImp;
-import agent.model.Performance;
-import agent.model.PersisterBinaryReaderWriter;
-import agent.model.PersisterTextReaderWriter;
-
 //public class EngineImpTest extends TestCase {
 public class ExecCenterTest extends TestCase {
 	String path = "";
-	String fileSimpleName = "matrix.txt";
-	String trainData = "test1.txt";
+	String fileSimpleName = "matrix";
+	String trainData = "test001.txt";
 	public Engine engine = new EngineImp();
 
 	@Override
@@ -26,10 +19,9 @@ public class ExecCenterTest extends TestCase {
 		Engine newEngine = new EngineImp();
 		String filename = path + fileSimpleName;
 		if (new File(filename).exists()) {
-			PersisterTextReaderWriter.load(filename, newEngine);
-		}else{
-			newEngine.clear();
+			new File(filename).delete();
 		}
+		newEngine.clear();
 		this.engine = newEngine;
 		this.dataRefresh();
 	}
@@ -106,25 +98,25 @@ public class ExecCenterTest extends TestCase {
 	}
 
 	public void testTrainNew_Click() throws IOException {
-		String[] sa = trainData.split("[\r\n]");
+		execTrainNew("test001.txt");
+	}
 
-		for (int i = 0; i < sa.length && sa[i].length() > 0; i++) {
-			String filename = path + sa[i];
+	private void execTrainNew(String filename) throws IOException {
 
-			if (!new File(filename).exists()) {
-				continue;
-			}
-
-			BufferedReader r = util.Files.OpenText(filename);
-			for (String s = r.readLine(); s != null; s = r.readLine()) {
-				if (s.length() > 0) {
-					engine.trainNew(s);
-				}
-			}
-			r.close();
-			this.dataRefresh();
+		if (!new File(filename).exists()) {
+			fail();
 		}
 
+		BufferedReader r = util.Files.OpenText(filename);
+		for (String s = r.readLine(); s != null; s = r.readLine()) {
+			if (s.length() > 0) {
+				engine.trainNew(s);
+			}
+		}
+		r.close();
+		this.dataRefresh();
+		PersisterTextReaderWriter.save(path + fileSimpleName + ".txt", engine);
+		PersisterBinaryReaderWriter.save(path + fileSimpleName + ".bin", engine);
 	}
 
 	// public void txtFindText_KeyUp(Object sender, KeyEventArgs e)

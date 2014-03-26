@@ -2,7 +2,7 @@ package agent.model;
 
 import java.io.IOException;
 
-public interface TypeWriter {
+public interface DataWriter {
 	void save(String v) throws IOException;
 
 	void save(int v) throws IOException;

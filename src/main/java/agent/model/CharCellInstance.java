@@ -9,15 +9,15 @@ public class CharCellInstance extends CellInstance
 	}
 
 	@Override
-	public String toString()
-	{
-		return this.getCell().getValue().toString();
-	}
-
-	@Override
 	public WordInstance sibling(Link l)
 	{
 		return new WordInstance(l.getTo(), signal, startFrom, l.getConvexIndex(), startFrom + 1);
+	}
+
+	@Override
+	public String toString()
+	{
+		return this.cell.getValue().toString();
 	}
 
 }

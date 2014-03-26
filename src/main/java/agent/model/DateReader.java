@@ -2,7 +2,7 @@ package agent.model;
 
 import java.io.IOException;
 
-public interface TypeReader {
+public interface DateReader {
 	String readString() throws IOException;
 
 	int readInt() throws IOException;

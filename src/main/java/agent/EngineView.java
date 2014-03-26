@@ -301,7 +301,7 @@ public class EngineView extends ScrollableControl
 			for (Link l : cell.getConvex())
 			{
 				line.newSpan(l.getFrom(), panel.titleFont, panel.titleBrush, g.MeasureString(l.getFrom().getValue(), panel.titleFont));
-				line.newSpan((new Short(l.getStrength())).toString(), panel.font, panel.brush, g.MeasureString((new Short(l.getStrength())).toString(), panel.titleFont));
+				line.newSpan((new Short(l.getWeight())).toString(), panel.font, panel.brush, g.MeasureString((new Short(l.getWeight())).toString(), panel.titleFont));
 			}
 		}
 
@@ -310,7 +310,7 @@ public class EngineView extends ScrollableControl
 		for (Link c : cell.getConcave())
 		{
 			line = panel.newLine(c.getTo());
-			line.newSpan((new Short(c.getStrength())).toString(), g.MeasureString((new Short(c.getStrength())).toString(), panel.font));
+			line.newSpan((new Short(c.getWeight())).toString(), g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
 			for (Link l : c.getTo().getConvex())
 			{
 				if (l != c)
@@ -322,7 +322,7 @@ public class EngineView extends ScrollableControl
 					line.newSpan(l.getFrom(), panel.mainItemBrush, g.MeasureString(l.getFrom().getValue(), panel.font));
 				}
 			}
-			line.newSpan(c.getTo(), "\u21d2", panel.font, panel.brush, g.MeasureString((new Short(c.getStrength())).toString(), panel.font));
+			line.newSpan(c.getTo(), "\u21d2", panel.font, panel.brush, g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
 		}
 		this.AutoScrollMinSize = new Size((int)panel.maxX, (int)panel.maxY);
 	}
@@ -341,27 +341,27 @@ public class EngineView extends ScrollableControl
 		panel.height = panel.font.getHeight() + 4;
 
 		Line line = panel.newLine(); // title
-		line.newSpan("ƒeƒXƒg", panel.titleFont, panel.titleBrush, g.MeasureString("ƒeƒXƒg", panel.titleFont));
-		line.newSpan("ƒP[ƒX", panel.titleFont, panel.titleBrush, g.MeasureString("ƒP[ƒX", panel.titleFont));
+		line.newSpan("ï¿½eï¿½Xï¿½g", panel.titleFont, panel.titleBrush, g.MeasureString("ï¿½eï¿½Xï¿½g", panel.titleFont));
+		line.newSpan("ï¿½Pï¿½[ï¿½X", panel.titleFont, panel.titleBrush, g.MeasureString("ï¿½Pï¿½[ï¿½X", panel.titleFont));
 
 		line = panel.newLine(); // graw line
 
 		line = panel.newLine();
 		line.newSpan("3", g.MeasureString("3", panel.font));
-		line.newSpan("Œ»İ", panel.font, panel.brush, g.MeasureString("Œ»İ", panel.font));
-		line.newSpan("‚Ì", panel.font, panel.brush, g.MeasureString("‚Ì", panel.font));
-		line.newSpan("ƒeƒXƒgƒP[ƒX", panel.font, panel.mainItemBrush, g.MeasureString("ƒeƒXƒgƒP[ƒX", panel.font));
-		line.newSpan(null, "Ë", panel.font, panel.brush, g.MeasureString("Ë", panel.font));
+		line.newSpan("ï¿½ï¿½ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½eï¿½Xï¿½gï¿½Pï¿½[ï¿½X", panel.font, panel.mainItemBrush, g.MeasureString("ï¿½eï¿½Xï¿½gï¿½Pï¿½[ï¿½X", panel.font));
+		line.newSpan(null, "ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
 
 		line = panel.newLine();
 		line.newSpan("2", g.MeasureString("3", panel.font));
-		line.newSpan("ƒeƒXƒgƒP[ƒX", panel.font, panel.mainItemBrush, g.MeasureString("ƒeƒXƒgƒP[ƒX", panel.font));
-		line.newSpan("‚ğ", panel.font, panel.brush, g.MeasureString("‚ğ", panel.font));
-		line.newSpan("ì‚é", panel.font, panel.brush, g.MeasureString("ì‚é", panel.font));
-		line.newSpan("‚½‚ß", panel.font, panel.brush, g.MeasureString("‚½‚ß", panel.font));
-		line.newSpan("‚É", panel.font, panel.brush, g.MeasureString("‚É", panel.font));
-		line.newSpan("‚Í", panel.font, panel.brush, g.MeasureString("‚Í", panel.font));
-		line.newSpan(null, "Ë", panel.font, panel.brush, g.MeasureString("Ë", panel.font));
+		line.newSpan("ï¿½eï¿½Xï¿½gï¿½Pï¿½[ï¿½X", panel.font, panel.mainItemBrush, g.MeasureString("ï¿½eï¿½Xï¿½gï¿½Pï¿½[ï¿½X", panel.font));
+		line.newSpan("ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½ï¿½ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
+		line.newSpan("ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
+		line.newSpan(null, "ï¿½ï¿½", panel.font, panel.brush, g.MeasureString("ï¿½ï¿½", panel.font));
 
 	}
 
