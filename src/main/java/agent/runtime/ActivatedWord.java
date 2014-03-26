@@ -38,7 +38,7 @@ public class ActivatedWord extends ActivatedCell
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Analyzer analyzer, List<ActivatedCell> buffer, Link l, int curIndex)
+	public final void act(Context analyzer, List<ActivatedCell> buffer, Link l, int curIndex)
 	{
 		if (this.nextCandidateIndex == curIndex && l.offset == this.nextConvexIndex)
 		{
@@ -59,11 +59,11 @@ public class ActivatedWord extends ActivatedCell
 		}
 	}
 
-	public final void die(Analyzer analyzer)
+	public final void die(Context context)
 	{
 		if (nextConvexIndex - offset > 1)
 		{
-			analyzer.reasign(this.value, offset, nextConvexIndex);
+			context.reasign(this.value, offset, nextConvexIndex);
 		}
 	}
 

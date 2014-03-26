@@ -22,7 +22,7 @@ public abstract class ActivatedCell
 		this.indexFrom = index;
 	}
 
-	public final void activate(Analyzer analyzer, List<ActivatedCell> buffer)
+	public final void activate(Context analyzer, List<ActivatedCell> buffer)
 	{
 		for (Link link : value.getParents())
 		{

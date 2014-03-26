@@ -6,18 +6,18 @@ import java.util.List;
 import agent.model.Cell;
 import agent.model.Engine;
 
-public class Analyzer {
+public class Context {
 	public static void trainNew(Engine engine, String sample) {
-		Analyzer a = Analyzer.Instance(engine);
-		// a.getAnalyzerListen().add(analyzerListenHandler);
+		Context a = Context.Instance(engine);
+		// a.getcontextListen().add(contextListenHandler);
 		a.runAndAdd(sample);
 	}
 
-	static Analyzer instance = null;
+	static Context instance = null;
 
-	public static Analyzer Instance(Engine engine) {
+	public static Context Instance(Engine engine) {
 		if (instance != null) return instance;
-		instance = new Analyzer(engine);
+		instance = new Context(engine);
 		return instance;
 	}
 
@@ -30,8 +30,8 @@ public class Analyzer {
 	static final int BASE_LENGTH = 0x10000;
 	static final int MAX_LENGTH = 0x20000;
 
-	// private AnalyzerListenHandlerImp analyzerListen = new
-	// AnalyzerListenHandlerImp();
+	// private contextListenHandlerImp contextListen = new
+	// contextListenHandlerImp();
 
 	private Engine engine;
 	private static long SIGNAL_SEED = System.currentTimeMillis();
@@ -98,11 +98,11 @@ public class Analyzer {
 //		}
 //	}
 
-	private Analyzer(Engine engine) {
+	private Context(Engine engine) {
 		this.engine = engine;
 	}
 
-	final Analyzer run(String sample) {
+	final Context run(String sample) {
 		signal = SIGNAL_SEED++;
 		// if (sample.StartsWith("�K�v���K�v"))
 		// {
@@ -129,7 +129,7 @@ public class Analyzer {
 
 			// checkDead(i);
 
-			// AnalyzerListenHandler temp = this.analyzerListen;
+			// contextListenHandler temp = this.contextListen;
 			// if (temp != null)
 			// {
 			// temp.exec(sample, candidate);
@@ -197,7 +197,7 @@ public class Analyzer {
 		// oldCell.addTos(newLink);
 	}
 
-	final Analyzer runAndAdd(String sample) {
+	final Context runAndAdd(String sample) {
 		this.run(sample);
 		this.add();
 		return this;
@@ -211,12 +211,12 @@ public class Analyzer {
 		return fresh;
 	}
 
-	// final AnalyzerListenHandlerImp getAnalyzerListen() {
-	// return this.analyzerListen;
+	// final contextListenHandlerImp getcontextListen() {
+	// return this.contextListen;
 	// }
 	//
-	// final void setAnalyzerListen(AnalyzerListenHandlerImp value) {
-	// this.analyzerListen = value;
+	// final void setcontextListen(contextListenHandlerImp value) {
+	// this.contextListen = value;
 	// }
 
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import util.Savable;
 import util.TypeReader;
 import util.TypeWriter;
-import agent.runtime.Analyzer;
+import agent.runtime.Context;
 
 public class Engine implements Savable {
 	public static final int BASE_LENGTH = 0x10000;
@@ -98,7 +98,7 @@ public class Engine implements Savable {
 //	}
 
 	public final void trainNew(String sample) {
-		Analyzer.trainNew(this, sample);
+		Context.trainNew(this, sample);
 	}
 
 	public final Cell find(String sample) {
