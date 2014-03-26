@@ -19,7 +19,7 @@ public class EngineImpTest extends TestCase {
 	String fileSimpleName = "matrix.txt";
 
 	protected void setUp() throws Exception {
-		engine = new Engine();
+		engine = new EngineImp();
 
 		String filepathname = folder + fileSimpleName;
 		if (new File(filepathname).exists()) {

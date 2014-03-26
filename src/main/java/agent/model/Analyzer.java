@@ -1,6 +1,5 @@
 package agent.model;
 
-import util.AnalyzerListenHandlerImp;
 
 public interface Analyzer {
 	WordInstance getItem(int index);
@@ -13,9 +12,9 @@ public interface Analyzer {
 
 	Cell getCell();
 
-	AnalyzerListenHandlerImp getAnalyzerListen();
-
-	void setAnalyzerListen(AnalyzerListenHandlerImp value);
+//	AnalyzerListenHandlerImp getAnalyzerListen();
+//
+//	void setAnalyzerListen(AnalyzerListenHandlerImp value);
 
 	Analyzer run(String sample);
 

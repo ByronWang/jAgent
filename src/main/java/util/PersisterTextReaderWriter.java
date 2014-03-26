@@ -11,6 +11,9 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
 import agent.model.Engine;
+import agent.model.Savable;
+import agent.model.TypeReader;
+import agent.model.TypeWriter;
 
 public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 	public static char SEPERATOR = ';';

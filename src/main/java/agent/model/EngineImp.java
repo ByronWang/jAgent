@@ -2,26 +2,24 @@ package agent.model;
 
 import java.io.IOException;
 
-import util.AnalyzerListenHandler;
-
 public class EngineImp implements Engine, Savable {
 	public static final int BASE_LENGTH = 0x10000;
-	AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler() {
-
-		@Override
-		public void exec(String src, Candidator<CellInstance> candidate) {
-			if (src.length() > 10) {
-				StringBuilder sb = new StringBuilder();
-				for (CellInstance ci : candidate) {
-					sb.append("[");
-					sb.append(ci.getCell().getValue());
-					sb.append("]");
-				}
-				System.out.println(sb.toString());
-			}
-
-		}
-	};
+//	AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler() {
+//
+//		@Override
+//		public void exec(String src, Candidator<CellInstance> candidate) {
+//			if (src.length() > 10) {
+//				StringBuilder sb = new StringBuilder();
+//				for (CellInstance ci : candidate) {
+//					sb.append("[");
+//					sb.append(ci.getCell().getValue());
+//					sb.append("]");
+//				}
+//				System.out.println(sb.toString());
+//			}
+//
+//		}
+//	};
 
 	private java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(BASE_LENGTH + BASE_LENGTH);
 
@@ -95,7 +93,7 @@ public class EngineImp implements Engine, Savable {
 
 	public final void trainNew(String sample) {
 		Analyzer a = RunnableInstance.Instance(this);
-		a.getAnalyzerListen().add(analyzerListenHandler);
+//		a.getAnalyzerListen().add(analyzerListenHandler);
 		a.runAndAdd(sample);
 	}
 
