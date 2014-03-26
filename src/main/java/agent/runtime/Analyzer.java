@@ -124,7 +124,7 @@ public class Analyzer {
 
 			CellInstance charCell = new CharCellInstance(this.engine.getItem((int) sample.charAt(i)), signal, i);
 			candidate.add(charCell);
-			charCell.succeed(this, candidate);
+			charCell.activate(this, candidate);
 
 			// checkDead(i);
 

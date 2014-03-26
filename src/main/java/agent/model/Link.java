@@ -8,10 +8,10 @@ import util.TypeWriter;
 
 public class Link implements Savable
 {
-	private short strength = 0;
 	private Cell to = null;
 	private Cell from = null;
 	private int offset = 0;
+	private short weight = 0;
 
 	public final Cell getTo()
 	{
@@ -30,22 +30,22 @@ public class Link implements Savable
 	{
 		from = value;
 	}
-	public final int getConvexIndex()
+	public final int getOffset()
 	{
 		return offset;
 	}
-	public final void setConvexIndex(int value)
+	public final void setOffset(int value)
 	{
 		offset = value;
 	}
 
-	public final short getStrength()
+	public final short getWeight()
 	{
-		return strength;
+		return weight;
 	}
-	public final void setStrength(short value)
+	public final void setWeight(short value)
 	{
-		strength = value;
+		weight = value;
 	}
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#endregion

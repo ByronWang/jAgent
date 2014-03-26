@@ -19,9 +19,9 @@ public class Cell implements Savable {
 	// /#region Access
 
 	public final Cell getItem(int index) {
-		if (this.convex.size() > 0) {
+		if (this.children.size() > 0) {
 			int i = index;
-			for (Link l : this.convex) {
+			for (Link l : this.children) {
 				Cell cell = l.getFrom();
 				if (cell.getLength() > i) {
 					return cell.getItem(i);
@@ -38,28 +38,28 @@ public class Cell implements Savable {
 
 	public int getLength() {
 		int length = 0;
-		for (Link from : this.convex) {
+		for (Link from : this.children) {
 			length += from.getFrom().getLength();
 		}
 		return length;
 	}
 
 	public int index = 0;
-	private java.util.ArrayList<Link> convex = new java.util.ArrayList<Link>();
+	private java.util.ArrayList<Link> children = new java.util.ArrayList<Link>();
 
 	public final java.util.ArrayList<Link> getConvex() {
-		return convex;
+		return children;
 	}
 
-	private java.util.ArrayList<Link> concave = new java.util.ArrayList<Link>();
+	private java.util.ArrayList<Link> parents = new java.util.ArrayList<Link>();
 
-	public final java.util.ArrayList<Link> getConcave() {
-		return concave;
+	public final java.util.ArrayList<Link> getParents() {
+		return parents;
 	}
 
 	public String getValue() {
 		String s = "";
-		for (Link l : this.convex) {
+		for (Link l : this.children) {
 			s += l.getFrom().getValue();
 		}
 		return s;
@@ -75,9 +75,9 @@ public class Cell implements Savable {
 		v.save(this.getValue());
 
 		// convex
-		v.save(convex.size());
+		v.save(children.size());
 
-		for (Link l : convex) {
+		for (Link l : children) {
 			((Savable) l).save(engine, v);
 		}
 		v.clearWrite();
@@ -91,9 +91,9 @@ public class Cell implements Savable {
 		for (int i = 0; i < count; i++) {
 			Link l = new Link();
 			l.setTo(this);
-			l.setConvexIndex(i);
+			l.setOffset(i);
 			((Savable) l).load(engine, v);
-			convex.add(l);
+			children.add(l);
 		}
 		v.clearReader();
 	}
@@ -109,16 +109,16 @@ public class Cell implements Savable {
 		// {
 		// if(link.ConvexIndex < concave[i].ConvexIndex || link.ConvexIndex
 		// }
-		this.concave.add(link);
+		this.parents.add(link);
 	}
 
 	public final Cell comeFrom(Cell cell) {
 		Link newLink = new Link();
-		this.convex.add(newLink);
+		this.children.add(newLink);
 		newLink.setFrom(cell);
 		newLink.setTo(this);
-		newLink.setConvexIndex(this.convex.size() - 1);
-		newLink.setStrength((short) 1);
+		newLink.setOffset(this.children.size() - 1);
+		newLink.setWeight((short) 1);
 		cell.addTos(newLink);
 		// cell.reinforce();
 
@@ -126,15 +126,15 @@ public class Cell implements Savable {
 	}
 
 	public final Cell reinforce() {
-		for (Link l : this.convex) {
-			l.setStrength((short) (l.getStrength() + 1));
+		for (Link l : this.children) {
+			l.setWeight((short) (l.getWeight() + 1));
 		}
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		return this.getValue() + " . " + this.concave.size();
+		return this.getValue() + " . " + this.parents.size();
 	}
 	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 	// /#endregion

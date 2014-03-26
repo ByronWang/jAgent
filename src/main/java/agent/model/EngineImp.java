@@ -76,7 +76,7 @@ public class EngineImp implements Engine, Savable {
 
 		for (int i = BASE_LENGTH; i < count; i++) {
 			for (Link link : cells.get(i).getConvex()) {
-				link.getFrom().getConcave().add(link);
+				link.getFrom().getParents().add(link);
 			}
 		}
 

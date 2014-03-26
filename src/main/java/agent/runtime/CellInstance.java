@@ -22,17 +22,14 @@ public abstract class CellInstance
 		this.startFrom = index;
 	}
 
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region active logic
-
-	public final void succeed(Analyzer analyzer, List<CellInstance> candidate)
+	public final void activate(Analyzer analyzer, List<CellInstance> candidate)
 	{
-		for (Link link : cell.getConcave())
+		for (Link link : cell.getParents())
 		{
-			if (link.getConvexIndex() > 0)
+			if (link.getOffset() > 0)
 			{
 				WordInstance w = analyzer.getItem(link.getTo().index);
-				if (w != null)
+				if (w != null) // 如果已经激活
 				{
 					w.act(analyzer, candidate, link, this.startFrom); // ?????
 				}
@@ -43,9 +40,9 @@ public abstract class CellInstance
 			}
 		}
 
-		for (Link link : cell.getConcave())
+		for (Link link : cell.getParents())
 		{
-			if (link.getConvexIndex() == 0)
+			if (link.getOffset() == 0)
 			{
 				if (link.getTo().getLength() > 1)
 				{
@@ -55,7 +52,7 @@ public abstract class CellInstance
 				{
 					WordInstance w = this.sibling(link);
 					candidate.set(this.startFrom, w);
-					w.succeed(analyzer, candidate);
+					w.activate(analyzer, candidate);
 				}
 			}
 		}
