@@ -3,6 +3,7 @@ package agent.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.AnalyzerListenHandler;
 import util.AnalyzerListenHandlerImp;
 import agent.model.Cell;
 import agent.model.Engine;
@@ -64,21 +65,22 @@ public class Analyzer {
 
 	// }
 	// }
-
-	private Cell createSubCell(List<CellInstance> can, int startIndex, int nextIndex) {
-		if (nextIndex - startIndex == 1) {
-			return can.get(startIndex).cell;
-		} else {
-			Cell subCell = new Cell();
-			for (int j = startIndex; j < nextIndex;) {
-				Cell sc = can.get(j).cell;
-				subCell.comeFrom(sc);
-				j += sc.getLength();
-			}
-			this.engine.add(subCell);
-			return subCell;
-		}
-	}
+	//
+	// private Cell createSubCell(List<CellInstance> can, int startIndex, int
+	// nextIndex) {
+	// if (nextIndex - startIndex == 1) {
+	// return can.get(startIndex).cell;
+	// } else {
+	// Cell subCell = new Cell();
+	// for (int j = startIndex; j < nextIndex;) {
+	// Cell sc = can.get(j).cell;
+	// subCell.comeFrom(sc);
+	// j += sc.getLength();
+	// }
+	// this.engine.add(subCell);
+	// return subCell;
+	// }
+	// }
 
 	public final AnalyzerListenHandlerImp getAnalyzerListen() {
 		return this.analyzerListen;
@@ -127,54 +129,116 @@ public class Analyzer {
 		// oldCell.addTos(newLink);
 	}
 
-	public final Cell run(String strSample) {
+	// public final Cell run(String strSample) {
+	// signal = SIGNAL_SEED++;
+	//
+	// char[] sample = strSample.toCharArray();
+	//
+	// candidate = new ArrayList<>(sample.length);
+	//
+	// activeStack.clear();
+	//
+	// int from = 0;
+	// int to = 0;
+	// for (int i = 0; i < sample.length; i++) {
+	// char c = sample[i];
+	// if (!Character.isLetter(c)) { // 如果不是字符
+	// if (i - from > 1 && candidate.get(from).cell.getLength() < i - from) { //
+	// 如果之前已经积累值了，则关闭前一个选择
+	// Cell cell = createSubCell(candidate, from, i);
+	// candidate.set(from,
+	// candidate.get(from).sibling(cell.getChildren().get(0)));
+	// }
+	// from = i + 1;
+	// to = from;
+	// }
+	//
+	// CellInstance charCell = new
+	// CharCellInstance(this.engine.getCell(sample[i]), signal, i);
+	// candidate.add(charCell);
+	// to = i;
+	// charCell.succeed(this, candidate); // 计算是否能够替换成词语
+	//
+	// // checkDead(i);
+	// if (this.analyzerListen != null) {
+	// this.analyzerListen.exec(strSample, candidate);
+	// }
+	// }
+	//
+	// if (from > 0 && candidate.size() > 1 &&
+	// candidate.get(from).cell.getLength() < candidate.size() - from) { //
+	// 如果之前已经积累值了，则关闭前一个选择
+	// Cell cell = createSubCell(candidate, from, to);
+	// candidate.set(from,
+	// candidate.get(from).sibling(cell.getChildren().get(0)));
+	// }
+	//
+	// Cell sentence;
+	// if (candidate.get(0).cell.getLength() < to) {
+	// sentence = makeCell();
+	// isNewSentence = true;
+	// } else {
+	// isNewSentence = false;
+	// sentence = candidate.get(0).cell;
+	// }
+	//
+	// return sentence;
+	// }
+	//
+	// private Cell makeCell() {
+	// Cell cell = new Cell();
+	// for (int j = 0; j < candidate.size();) {
+	// Cell sc = candidate.get(j).cell;
+	// cell.comeFrom(sc);
+	// j += sc.getLength();
+	// }
+	// return cell;
+	// }
+
+	public final Cell run(String sample) {
 		signal = SIGNAL_SEED++;
-
-		char[] sample = strSample.toCharArray();
-
-		candidate = new ArrayList<>(sample.length);
-
+		// if (sample.StartsWith("�K�v���K�v"))
+		// {
+		// System.Console.WriteLine(sample);
+		// }
+		// tmp.Clear();
+		candidate= new ArrayList<>(sample.length());
 		activeStack.clear();
 
-		int from = 0;
-		int to = 0;
-		for (int i = 0; i < sample.length; i++) {
-			char c = sample[i];
-			if (!Character.isLetter(c)) { // 如果不是字符
-				if (i - from > 1 && candidate.get(from).cell.getLength() < i - from) { // 如果之前已经积累值了，则关闭前一个选择
-					Cell cell = createSubCell(candidate, from, i);
-					candidate.set(from, candidate.get(from).sibling(cell.getChildren().get(0)));
+		int startIndex = 0;
+		for (int i = 0; i < sample.length(); i++) {
+			char c = sample.charAt(i);
+			if (!Character.isLetter(c)) {
+				if (i - startIndex > 1 && candidate.get(startIndex).cell.getLength() < i - startIndex) {
+					Cell cell = createSubCell(candidate, startIndex, i);
+					candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getChildren().get(0)));
 				}
-				from = i + 1;
-				to = from;
+				startIndex = i + 1;
 			}
 
-			CellInstance charCell = new CharCellInstance(this.engine.getCell(sample[i]), signal, i);
+			CellInstance charCell = new CharCellInstance(this.engine.getCell((int) sample.charAt(i)), signal, i);
 			candidate.add(charCell);
-			to = i;
-			charCell.succeed(this, candidate); // 计算是否能够替换成词语
+			charCell.succeed(this, candidate);
 
 			// checkDead(i);
-			if (this.analyzerListen != null) {
-				this.analyzerListen.exec(strSample, candidate);
+
+			AnalyzerListenHandler temp = this.analyzerListen;
+			if (temp != null) {
+				temp.exec(sample, candidate);
 			}
 		}
-
-		if (from > 0 && to - from > 1 && candidate.get(from).cell.getLength() < candidate.size() - from) { // 如果之前已经积累值了，则关闭前一个选择
-			Cell cell = createSubCell(candidate, from, to);
-			candidate.set(from, candidate.get(from).sibling(cell.getChildren().get(0)));
+		if (startIndex > 0 && candidate.size() - startIndex > 1 && candidate.get(startIndex).cell.getLength() < candidate.size() - startIndex) {
+			Cell cell = createSubCell(candidate, startIndex, candidate.size());
+			candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getChildren().get(0)));
 		}
 
-		Cell sentence;
-		if (candidate.get(0).cell.getLength() < to) {
-			sentence = makeCell();
+		if (candidate.get(0).cell.getLength() < candidate.size()) {
 			isNewSentence = true;
+			return makeCell();
 		} else {
 			isNewSentence = false;
-			sentence = candidate.get(0).cell;
+			return candidate.get(0).cell;
 		}
-
-		return sentence;
 	}
 
 	private Cell makeCell() {
@@ -185,6 +249,21 @@ public class Analyzer {
 			j += sc.getLength();
 		}
 		return cell;
+	}
+
+	private Cell createSubCell(List<CellInstance> can, int startIndex, int nextIndex) {
+		if (nextIndex - startIndex == 1) {
+			return can.get(startIndex).cell;
+		} else {
+			Cell subCell = new Cell();
+			for (int j = startIndex; j < nextIndex;) {
+				Cell sc = can.get(j).cell;
+				subCell.comeFrom(sc);
+				j += sc.getLength();
+			}
+			this.engine.add(subCell);
+			return subCell;
+		}
 	}
 
 	public final void runAndAdd(String sample) {
