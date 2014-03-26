@@ -7,15 +7,29 @@ import agent.model.Cell;
 import agent.model.Engine;
 
 
-public class Analyzer {
+public class Analyzer {	
+	 public static void trainNew(Engine engine,String sample){
+		Analyzer a = Analyzer.Instance(engine);
+//		a.getAnalyzerListen().add(analyzerListenHandler);
+		a.runAndAdd(sample);
+	}
+	 
+	 static Analyzer instance=null;
+
+	 public static Analyzer Instance(Engine engine) {
+		 if(instance!=null)return instance;		 
+		 instance= new Analyzer(engine);
+		return instance;
+	}
+	
 	protected Cell cell = null;
 
-	public final Cell getCell() {
+	 final Cell getCell() {
 		return cell;
 	}
 
-	public static final int BASE_LENGTH = 0x10000;
-	public static final int MAX_LENGTH = 0x20000;
+	 static final int BASE_LENGTH = 0x10000;
+	 static final int MAX_LENGTH = 0x20000;
 
 //	private AnalyzerListenHandlerImp analyzerListen = new AnalyzerListenHandlerImp();
 
@@ -29,7 +43,7 @@ public class Analyzer {
 
 	private java.util.ArrayList<Integer> activeStack = new java.util.ArrayList<Integer>();
 
-	public final WordInstance getItem(int index) {
+	 final WordInstance getItem(int index) {
 		index -= BASE_LENGTH;
 		if (matchingBuffer[index] == null) // hasn't matched word
 		{
@@ -43,7 +57,7 @@ public class Analyzer {
 		return null;
 	}
 
-	public final void setItem(int index, WordInstance value) {
+	 final void setItem(int index, WordInstance value) {
 		index -= BASE_LENGTH;
 		WordInstance tci = matchingBuffer[index];
 
@@ -96,12 +110,7 @@ public class Analyzer {
 		this.engine = engine;
 	}
 
-	public static Analyzer Instance(Engine engine) {
-		Analyzer a = new Analyzer(engine);
-		return a;
-	}
-
-	public final Analyzer run(String sample) {
+	 final Analyzer run(String sample) {
 		signal = SIGNAL_SEED++;
 		// if (sample.StartsWith("�K�v���K�v"))
 		// {
@@ -175,7 +184,7 @@ public class Analyzer {
 		return cell;
 	}
 
-	public final void reasign(Cell oldCell, int convexStartIndex, int nextConvexIndex) {
+	 final void reasign(Cell oldCell, int convexStartIndex, int nextConvexIndex) {
 		// Cell newCell = this.engine.newCell();
 		// for (int i = 0; i < nextConvexIndex - convexStartIndex; i++)
 		// {
@@ -196,25 +205,25 @@ public class Analyzer {
 		// oldCell.addTos(newLink);
 	}
 
-	public final Analyzer runAndAdd(String sample) {
+	 final Analyzer runAndAdd(String sample) {
 		this.run(sample);
 		this.add();
 		return this;
 	}
 
-	public final int getLength() {
+	 final int getLength() {
 		return matchingBuffer.length;
 	}
 
-	public final boolean isFresh() {
+	 final boolean isFresh() {
 		return fresh;
 	}
 
-//	public final AnalyzerListenHandlerImp getAnalyzerListen() {
+//	 final AnalyzerListenHandlerImp getAnalyzerListen() {
 //		return this.analyzerListen;
 //	}
 //
-//	public final void setAnalyzerListen(AnalyzerListenHandlerImp value) {
+//	 final void setAnalyzerListen(AnalyzerListenHandlerImp value) {
 //		this.analyzerListen = value;
 //	}
 

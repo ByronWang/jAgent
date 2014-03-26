@@ -104,6 +104,10 @@ public class ExecCenterTest extends TestCase {
 	public void testTrainNew_Simple() throws IOException {
 		execTrainNew("test001.txt");
 	}
+	
+	public void testTrainNew_Full() throws IOException {
+		execTrainNew("test002.txt");
+	}
 
 	public void testTrainNew_003() throws IOException {
 		execTrainNew("test003.txt");
