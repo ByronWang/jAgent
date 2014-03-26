@@ -124,6 +124,7 @@ public class PersisterBinaryReaderWriter implements DateReader,DataWriter
 		w.write(int1(x));
 		w.write(int0(x));
 	}
+	
 
 	public int readInt() throws IOException
 	{

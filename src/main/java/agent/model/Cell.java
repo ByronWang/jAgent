@@ -81,7 +81,7 @@ public class Cell implements Savable {
 	}
 	
 	public void load(Engine engine, DateReader v) throws IOException {
-		v.readString(); // value
+//		v.readString(); // value
 		// convex
 		int count = v.readInt();
 
@@ -103,7 +103,7 @@ public class Cell implements Savable {
 	}
 
 	public void save(Engine engine, DataWriter v) throws IOException {
-		v.save(this.getValue());
+//		v.save(this.getValue());
 
 		// convex
 		v.save(convex.size());

@@ -114,7 +114,7 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 		byteCheck((byte)1);
 		byteCheck((byte)-1);
 		byteCheck((byte)100);
-		byteCheck((byte)-100);
+		byteCheck((byte)-256);
 	}
 	private void byteCheck(byte expected) throws IOException {
 
@@ -129,7 +129,9 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 		ByteArrayInputStream bi = new ByteArrayInputStream(buffer);
 
 		w.r = bi;
-		assertEquals(expected, w.readByte());
+		byte b = w.readByte();
+		System.out.println(b);
+		assertEquals(expected, b);
 	}
 
 	public final void testClearWrite() {
@@ -139,5 +141,25 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 	public final void testClearReader() {
 		fail("Not yet implemented"); // TODO
 	}
+	
+    private static byte int3(int x) { return (byte)(x >> 21& 0B01111111); }
+    private static byte int2(int x) { return (byte)(x >> 14& 0B01111111); }
+    private static byte int1(int x) { return (byte)(x >>  7 & 0B01111111); }
+    private static byte int0(int x) { return (byte)(x     & 0B01111111 ); }
+    
+	public final void testIntEncode(){
+		int x = 256;
 
+		byte b3 = int3(x);
+		byte b2 = int2(x);
+		byte b1 = int1(x);
+		byte b0 = int0(x);
+
+		System.out.println(b3);
+		System.out.println(b2);
+		System.out.println(b1);
+		System.out.println(b0);
+		
+		
+	}
 }
