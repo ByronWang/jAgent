@@ -198,15 +198,15 @@ public class Analyzer {
 
 	public final void setItem(int index, WordInstance value) {
 		index -= BASE_LENGTH;
-		WordInstance tci = matchingBuffer[index];
+		WordInstance word = matchingBuffer[index];
 
-		if (tci == null || tci.signal != signal) {
+		if (word == null || word.signal != signal) {
 			matchingBuffer[index] = value;
 		} else {
-			while (tci.getNext() != null) {
-				tci = tci.getNext();
+			while (word.getNext() != null) {
+				word = word.getNext();
 			}
-			tci.setNext(value);
+			word.setNext(value);
 		}
 		this.activeStack.add(index);
 	}

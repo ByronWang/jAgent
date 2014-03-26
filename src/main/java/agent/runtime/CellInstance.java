@@ -18,6 +18,8 @@ public abstract class CellInstance {
 		this.startFrom = index;
 	}
 
+	@Deprecated
+	// 如何工作还是没有想起来，5年了，完全忘了
 	public final void succeed(Analyzer analyzer, List<CellInstance> candidate) {
 		for (Link link : cell.getParents()) {
 			if (link.getOffset() > 0) {
