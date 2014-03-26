@@ -4,3 +4,7 @@ gen
 target
 /logs
 /tmp
+test001.txt
+test002.txt
+matrix.txt
+matrix.bin
