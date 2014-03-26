@@ -3,7 +3,6 @@ package agent.model;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import junit.framework.TestCase;
 
@@ -62,10 +61,19 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 
 	public final void testReadInt() throws IOException {
 		intCheck(0);
+		intCheck(10);
+		intCheck(127);
+		intCheck(128);
+		intCheck(256);
+		intCheck(512);
+		intCheck(1024);
+		intCheck(2048);
+		intCheck(4096);
 		intCheck(1000);
-		intCheck(-1000);
-		intCheck(-1);
 		intCheck(1);
+		intCheck(0XFFFFFF);
+		intCheck(1073741824);
+		intCheck(2147483647);
 	}
 
 	private void intCheck(int expected) throws IOException {
@@ -100,22 +108,22 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 		assertEquals(expected, w.readShort());
 	}
 
-
 	public final void testReadShort() throws IOException {
-		shortCheck((short)0);
-		shortCheck((short)1);
-		shortCheck((short)-1);
-		shortCheck((short)100);
-		shortCheck((short)-100);
+		shortCheck((short) 0);
+		shortCheck((short) 1);
+		shortCheck((short) -1);
+		shortCheck((short) 100);
+		shortCheck((short) -100);
 	}
 
 	public final void testReadByte() throws IOException {
-		byteCheck((byte)0);
-		byteCheck((byte)1);
-		byteCheck((byte)-1);
-		byteCheck((byte)100);
-		byteCheck((byte)-256);
+		byteCheck((byte) 0);
+		byteCheck((byte) 1);
+		byteCheck((byte) -1);
+		byteCheck((byte) 100);
+		byteCheck((byte) -256);
 	}
+
 	private void byteCheck(byte expected) throws IOException {
 
 		byte[] buffer;
@@ -141,25 +149,5 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 	public final void testClearReader() {
 		fail("Not yet implemented"); // TODO
 	}
-	
-    private static byte int3(int x) { return (byte)(x >> 21& 0B01111111); }
-    private static byte int2(int x) { return (byte)(x >> 14& 0B01111111); }
-    private static byte int1(int x) { return (byte)(x >>  7 & 0B01111111); }
-    private static byte int0(int x) { return (byte)(x     & 0B01111111 ); }
-    
-	public final void testIntEncode(){
-		int x = 256;
 
-		byte b3 = int3(x);
-		byte b2 = int2(x);
-		byte b1 = int1(x);
-		byte b0 = int0(x);
-
-		System.out.println(b3);
-		System.out.println(b2);
-		System.out.println(b1);
-		System.out.println(b0);
-		
-		
-	}
 }
