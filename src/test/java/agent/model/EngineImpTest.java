@@ -3,15 +3,12 @@ package agent.model;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
-import util.Performance;
-import util.PersisterTextReaderWriter;
 
 import junit.framework.TestCase;
+import util.Performance;
+import util.PersisterTextReaderWriter;
 
 public class EngineImpTest extends TestCase {
 	Engine engine;
@@ -19,7 +16,7 @@ public class EngineImpTest extends TestCase {
 	String fileSimpleName = "matrix.txt";
 
 	protected void setUp() throws Exception {
-		engine = new EngineImp();
+		engine = new Engine();
 
 		String filepathname = folder + fileSimpleName;
 		if (new File(filepathname).exists()) {

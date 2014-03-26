@@ -13,12 +13,6 @@ public class Link implements Savable
 	public int offset = 0;
 	public short weight = 0;
 
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
-
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region Savable Members
-
 	public void save(Engine engine, TypeWriter v) throws IOException
 	{
 		//v.save(strength);
@@ -30,9 +24,6 @@ public class Link implements Savable
 		//strength = v.readShort();
 		from = engine.getCells().get(v.readInt());
 	}
-
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
 
 	@Override
 	public String toString()

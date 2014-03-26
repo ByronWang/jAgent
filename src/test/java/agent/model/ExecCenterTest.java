@@ -4,11 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.TestCase;
 import util.Performance;
 import util.PersisterBinaryReaderWriter;
 import util.PersisterTextReaderWriter;
-
-import junit.framework.TestCase;
 
 //public class EngineImpTest extends TestCase {
 public class ExecCenterTest extends TestCase {
@@ -20,7 +19,7 @@ public class ExecCenterTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 
-		Engine newEngine = new EngineImp();
+		Engine newEngine = new Engine();
 		String filename = path + fileSimpleName;
 		if (new File(filename).exists()) {
 			new File(filename).delete();
@@ -31,7 +30,7 @@ public class ExecCenterTest extends TestCase {
 	}
 
 	public void testLoad() {
-		Engine newEngine = new EngineImp();
+		Engine newEngine = new Engine();
 		String filename = path + fileSimpleName;
 		if (new File(filename).exists()) {
 			PersisterTextReaderWriter.load(filename, newEngine);
