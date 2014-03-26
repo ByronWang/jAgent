@@ -6,13 +6,13 @@ import agent.model.*;
 
 public class Form1 extends Form
 {
-	private Engine engine = new EngineImp();
+	private IEngine engine = new Engine();
 
 	public Form1()
 	{
 		InitializeComponent();
 		this.Cursor = Cursors.WaitCursor;
-		Engine newEngine = new EngineImp();
+		IEngine newEngine = new Engine();
 		String filename = this.txtFolder.getText() + this.txtFilename.getText();
 		if (File.Exists(filename))
 		{
@@ -39,7 +39,7 @@ public class Form1 extends Form
 	private void btnLoad_Click(Object sender, EventArgs e)
 	{
 		this.Cursor = Cursors.WaitCursor;
-		Engine newEngine = new EngineImp();
+		IEngine newEngine = new Engine();
 		String filename = this.txtFolder.getText() + this.txtFilename.getText();
 		if (File.Exists(filename))
 		{

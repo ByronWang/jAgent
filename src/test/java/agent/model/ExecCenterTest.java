@@ -15,12 +15,12 @@ public class ExecCenterTest extends TestCase {
 	String path = "";
 	String fileSimpleName = "matrix";
 	String trainData = "test001.txt";
-	public Engine engine = new EngineImp();
+	public IEngine engine = new Engine();
 
 	@Override
 	protected void setUp() throws Exception {
 
-		Engine newEngine = new EngineImp();
+		IEngine newEngine = new Engine();
 		String filename = path + fileSimpleName;
 		if (new File(filename).exists()) {
 			new File(filename).delete();
@@ -31,7 +31,7 @@ public class ExecCenterTest extends TestCase {
 	}
 
 	public void testLoad() {
-		Engine newEngine = new EngineImp();
+		IEngine newEngine = new Engine();
 		String filename = path + fileSimpleName;
 		if (new File(filename).exists()) {
 			PersisterTextReaderWriter.load(filename, newEngine);

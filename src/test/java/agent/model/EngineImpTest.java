@@ -14,12 +14,12 @@ import util.PersisterTextReaderWriter;
 import junit.framework.TestCase;
 
 public class EngineImpTest extends TestCase {
-	Engine engine;
+	IEngine engine;
 	String folder = "";
 	String fileSimpleName = "matrix.txt";
 
 	protected void setUp() throws Exception {
-		engine = new EngineImp();
+		engine = new Engine();
 
 		String filepathname = folder + fileSimpleName;
 		if (new File(filepathname).exists()) {
