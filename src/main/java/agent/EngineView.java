@@ -300,8 +300,8 @@ public class EngineView extends ScrollableControl
 		{
 			for (Link l : cell.getChildren())
 			{
-				line.newSpan(l.getFrom(), panel.titleFont, panel.titleBrush, g.MeasureString(l.getFrom().toString(), panel.titleFont));
-				line.newSpan((new Short(l.getWeight())).toString(), panel.font, panel.brush, g.MeasureString((new Short(l.getWeight())).toString(), panel.titleFont));
+				line.newSpan(l.from(), panel.titleFont, panel.titleBrush, g.MeasureString(l.from().toString(), panel.titleFont));
+				line.newSpan((new Short(l.weight())).toString(), panel.font, panel.brush, g.MeasureString((new Short(l.weight())).toString(), panel.titleFont));
 			}
 		}
 
@@ -309,20 +309,20 @@ public class EngineView extends ScrollableControl
 
 		for (Link c : cell.getParents())
 		{
-			line = panel.newLine(c.getTo());
-			line.newSpan((new Short(c.getWeight())).toString(), g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
-			for (Link l : c.getTo().getChildren())
+			line = panel.newLine(c.to());
+			line.newSpan((new Short(c.weight())).toString(), g.MeasureString((new Short(c.weight())).toString(), panel.font));
+			for (Link l : c.to().getChildren())
 			{
 				if (l != c)
 				{
-					line.newSpan(l.getFrom(), panel.brush, g.MeasureString(l.getFrom().toString(), panel.font));
+					line.newSpan(l.from(), panel.brush, g.MeasureString(l.from().toString(), panel.font));
 				}
 				else
 				{
-					line.newSpan(l.getFrom(), panel.mainItemBrush, g.MeasureString(l.getFrom().toString(), panel.font));
+					line.newSpan(l.from(), panel.mainItemBrush, g.MeasureString(l.from().toString(), panel.font));
 				}
 			}
-			line.newSpan(c.getTo(), "\u21d2", panel.font, panel.brush, g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
+			line.newSpan(c.to(), "\u21d2", panel.font, panel.brush, g.MeasureString((new Short(c.weight())).toString(), panel.font));
 		}
 		this.AutoScrollMinSize = new Size((int)panel.maxX, (int)panel.maxY);
 	}

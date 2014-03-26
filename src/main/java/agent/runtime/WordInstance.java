@@ -40,10 +40,10 @@ public class WordInstance extends CellInstance
 
 	public final void act(Analyzer analyzer, List<CellInstance> buffer, Link l, int curIndex)
 	{
-		if (this.nextCandidateIndex == curIndex && l.getOffset() == this.nextConvexIndex)
+		if (this.nextCandidateIndex == curIndex && l.offset == this.nextConvexIndex)
 		{
 			nextConvexIndex++;
-			this.nextCandidateIndex += l.getFrom().getLength();
+			this.nextCandidateIndex += l.from.getLength();
 
 			// succeed
 			if (this.offset == 0 && nextConvexIndex == this.cell.getConvex().size())
@@ -75,6 +75,6 @@ public class WordInstance extends CellInstance
 	@Override
 	public WordInstance sibling(Link l)
 	{
-		return new WordInstance(l.getTo(), signal, indexFrom, l.getOffset(), nextCandidateIndex);
+		return new WordInstance(l.to, signal, indexFrom, l.offset, nextCandidateIndex);
 	}
 }

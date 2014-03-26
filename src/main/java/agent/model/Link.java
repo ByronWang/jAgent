@@ -8,45 +8,11 @@ import util.TypeWriter;
 
 public class Link implements Savable
 {
-	private Cell to = null;
-	private Cell from = null;
-	private int offset = 0;
-	private short weight = 0;
+	public Cell to = null;
+	public Cell from = null;
+	public int offset = 0;
+	public short weight = 0;
 
-	public final Cell getTo()
-	{
-		return to;
-	}
-	public final void setTo(Cell value)
-	{
-		to = value;
-	}
-
-	public final Cell getFrom()
-	{
-		return from;
-	}
-	public final void setFrom(Cell value)
-	{
-		from = value;
-	}
-	public final int getOffset()
-	{
-		return offset;
-	}
-	public final void setOffset(int value)
-	{
-		offset = value;
-	}
-
-	public final short getWeight()
-	{
-		return weight;
-	}
-	public final void setWeight(short value)
-	{
-		weight = value;
-	}
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#endregion
 

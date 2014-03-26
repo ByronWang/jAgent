@@ -26,9 +26,9 @@ public abstract class CellInstance
 	{
 		for (Link link : cell.getParents())
 		{
-			if (link.getOffset() > 0)
+			if (link.offset > 0)
 			{
-				WordInstance w = analyzer.getItem(link.getTo().index);
+				WordInstance w = analyzer.getItem(link.to.index);
 				if (w != null) // 如果已经激活,确认是否匹配成功
 				{
 					w.act(analyzer, buffer, link, this.indexFrom); // ?????
@@ -42,11 +42,11 @@ public abstract class CellInstance
 
 		for (Link link : cell.getParents())
 		{
-			if (link.getOffset() == 0)
+			if (link.offset == 0)
 			{
-				if (link.getTo().getLength() > 1)
+				if (link.to.getLength() > 1)
 				{
-					analyzer.setItem(link.getTo().index, this.sibling(link));
+					analyzer.setItem(link.to.index, this.sibling(link));
 				}
 				else
 				{

@@ -20,7 +20,7 @@ public class CharCellInstance extends CellInstance
 	@Override
 	public WordInstance sibling(Link l)
 	{
-		return new WordInstance(l.getTo(), signal, indexFrom, l.getOffset(), indexFrom + 1);
+		return new WordInstance(l.to, signal, indexFrom, l.offset, indexFrom + 1);
 	}
 
 }

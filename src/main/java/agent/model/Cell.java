@@ -22,7 +22,7 @@ public class Cell implements Savable {
 		if (this.children.size() > 0) {
 			int i = index;
 			for (Link l : this.children) {
-				Cell cell = l.getFrom();
+				Cell cell = l.from;
 				if (cell.getLength() > i) {
 					return cell.getItem(i);
 				} else {
@@ -39,7 +39,7 @@ public class Cell implements Savable {
 	public int getLength() {
 		int length = 0;
 		for (Link from : this.children) {
-			length += from.getFrom().getLength();
+			length += from.from.getLength();
 		}
 		return length;
 	}
@@ -60,7 +60,7 @@ public class Cell implements Savable {
 	public String getValue() {
 		String s = "";
 		for (Link l : this.children) {
-			s += l.getFrom().getValue();
+			s += l.from.getValue();
 		}
 		return s;
 	}
@@ -90,8 +90,8 @@ public class Cell implements Savable {
 
 		for (int i = 0; i < count; i++) {
 			Link l = new Link();
-			l.setTo(this);
-			l.setOffset(i);
+			l.to=this;
+			l.offset=i;
 			((Savable) l).load(engine, v);
 			children.add(l);
 		}
@@ -115,10 +115,10 @@ public class Cell implements Savable {
 	public final Cell comeFrom(Cell cell) {
 		Link newLink = new Link();
 		this.children.add(newLink);
-		newLink.setFrom(cell);
-		newLink.setTo(this);
-		newLink.setOffset(this.children.size() - 1);
-		newLink.setWeight((short) 1);
+		newLink.from=cell;
+		newLink.to=this;
+		newLink.offset=this.children.size() - 1;
+		newLink.weight=(short) 1;
 		cell.addTos(newLink);
 		// cell.reinforce();
 
@@ -127,7 +127,7 @@ public class Cell implements Savable {
 
 	public final Cell reinforce() {
 		for (Link l : this.children) {
-			l.setWeight((short) (l.getWeight() + 1));
+			l.weight++;
 		}
 		return this;
 	}
