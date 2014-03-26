@@ -38,7 +38,7 @@ public class WordInstance extends CellInstance
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(AATT analyzer, List<CellInstance> candidate, Link l, int srcIndex)
+	public final void act(Analyzer analyzer, List<CellInstance> candidate, Link l, int srcIndex)
 	{
 		if (this.nextCandidateIndex == srcIndex && l.getConvexIndex() == this.nextConvexIndex)
 		{
@@ -59,7 +59,7 @@ public class WordInstance extends CellInstance
 		}
 	}
 
-	public final void die(AATT analyzer)
+	public final void die(Analyzer analyzer)
 	{
 		if (nextConvexIndex - convexStartIndex > 1)
 		{

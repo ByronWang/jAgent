@@ -25,7 +25,7 @@ public abstract class CellInstance
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#region active logic
 
-	public final void succeed(AATT analyzer, List<CellInstance> candidate)
+	public final void succeed(Analyzer analyzer, List<CellInstance> candidate)
 	{
 		for (Link link : cell.getConcave())
 		{

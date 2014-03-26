@@ -7,7 +7,7 @@ import agent.model.Cell;
 import agent.model.Engine;
 
 
-public class AATT {
+public class Analyzer {
 	protected Cell cell = null;
 
 	public final Cell getCell() {
@@ -92,16 +92,16 @@ public class AATT {
 	// }
 	// }
 
-	private AATT(Engine engine) {
+	private Analyzer(Engine engine) {
 		this.engine = engine;
 	}
 
-	public static AATT Instance(Engine engine) {
-		AATT a = new AATT(engine);
+	public static Analyzer Instance(Engine engine) {
+		Analyzer a = new Analyzer(engine);
 		return a;
 	}
 
-	public final AATT run(String sample) {
+	public final Analyzer run(String sample) {
 		signal = SIGNAL_SEED++;
 		// if (sample.StartsWith("�K�v���K�v"))
 		// {
@@ -196,7 +196,7 @@ public class AATT {
 		// oldCell.addTos(newLink);
 	}
 
-	public final AATT runAndAdd(String sample) {
+	public final Analyzer runAndAdd(String sample) {
 		this.run(sample);
 		this.add();
 		return this;
