@@ -17,6 +17,7 @@ public class Cell implements Savable {
 	public Cell(int index) {
 		this.index = index;
 	}
+
 	public final void addTos(Link link) {
 		// for (int i = 0; i < concave.Count; i++)
 		// {
@@ -25,16 +26,10 @@ public class Cell implements Savable {
 		this.concave.add(link);
 	}
 
-	public final Cell comeFrom(Cell cell) {
-		Link newLink = new Link();
+	public final Cell comeFrom(Cell from) {
+		Link newLink = new Link(from, this, this.convex.size() - 1, (short) 1);
+		from.addTos(newLink);
 		this.convex.add(newLink);
-		newLink.setFrom(cell);
-		newLink.setTo(this);
-		newLink.setConvexIndex(this.convex.size() - 1);
-		newLink.setWeight((short) 1);
-		cell.addTos(newLink);
-		// cell.reinforce();
-
 		return this;
 	}
 
@@ -81,20 +76,30 @@ public class Cell implements Savable {
 		}
 		return s;
 	}
-	
+
 	public void load(Engine engine, DateReader v) throws IOException {
 		v.readString(); // value
+		
 		// convex
 		int count = v.readInt();
 
 		for (int i = 0; i < count; i++) {
-			Link l = new Link();
-			l.setTo(this);
-			l.setConvexIndex(i);
-			((Savable) l).load(engine, v);
-			convex.add(l);
+			Cell from = engine.getCells().get(v.readInt());
+			Link newLink = new Link(from, this, i, (short) 1);
+			from.addTos(newLink);
+			convex.add(newLink);
 		}
 		v.clearReader();
+	}
+
+	public void save(Engine engine, DataWriter v) throws IOException {
+		v.save(this.getValue());
+		// convex
+		v.save(convex.size());
+		for (Link l : convex) {
+			v.save(l.getFrom().index);
+		}
+		v.clearWrite();
 	}
 
 	public final Cell reinforce() {
@@ -103,19 +108,7 @@ public class Cell implements Savable {
 		}
 		return this;
 	}
-
-	public void save(Engine engine, DataWriter v) throws IOException {
-		v.save(this.getValue());
-
-		// convex
-		v.save(convex.size());
-
-		for (Link l : convex) {
-			((Savable) l).save(engine, v);
-		}
-		v.clearWrite();
-	}
-
+	
 	@Override
 	public String toString() {
 		return this.getValue() + " . " + this.concave.size();

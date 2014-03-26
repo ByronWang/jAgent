@@ -10,6 +10,14 @@ public class Link implements Savable {
 	private Cell to = null;
 	private int offset = 0;
 
+	public Link(Cell from, Cell to, int offset, short weight) {
+		super();
+		this.from = from;
+		this.to = to;
+		this.offset = offset;
+		this.weight = weight;
+	}
+
 	public final Cell getTo() {
 		return to;
 	}
