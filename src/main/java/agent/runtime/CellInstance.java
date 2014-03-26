@@ -1,4 +1,10 @@
-package agent.model;
+package agent.runtime;
+
+import java.util.List;
+
+import agent.model.Analyzer;
+import agent.model.Cell;
+import agent.model.Link;
 
 public abstract class CellInstance
 {
@@ -20,7 +26,7 @@ public abstract class CellInstance
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#region active logic
 
-	public final void succeed(Analyzer analyzer, Candidator<CellInstance> candidate)
+	public final void succeed(Analyzer analyzer, List<CellInstance> candidate)
 	{
 		for (Link link : cell.getConcave())
 		{
@@ -49,7 +55,7 @@ public abstract class CellInstance
 				else
 				{
 					WordInstance w = this.sibling(link);
-					candidate.setItem(this.startFrom, w);
+					candidate.set(this.startFrom, w);
 					w.succeed(analyzer, candidate);
 				}
 			}

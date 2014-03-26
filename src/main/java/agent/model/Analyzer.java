@@ -1,5 +1,7 @@
 package agent.model;
 
+import agent.runtime.WordInstance;
+
 
 public interface Analyzer {
 	WordInstance getItem(int index);

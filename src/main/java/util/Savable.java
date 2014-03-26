@@ -1,6 +1,9 @@
-package agent.model;
+package util;
 
 import java.io.IOException;
+
+import agent.model.Engine;
+
 
 
 public interface Savable {

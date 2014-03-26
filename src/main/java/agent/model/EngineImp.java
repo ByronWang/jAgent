@@ -2,6 +2,12 @@ package agent.model;
 
 import java.io.IOException;
 
+import agent.runtime.RunnableInstance;
+
+import util.Savable;
+import util.TypeReader;
+import util.TypeWriter;
+
 public class EngineImp implements Engine, Savable {
 	public static final int BASE_LENGTH = 0x10000;
 //	AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler() {

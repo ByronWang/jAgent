@@ -1,4 +1,7 @@
-package agent.model;
+package agent.runtime;
+
+import agent.model.Cell;
+import agent.model.Link;
 
 public class CharCellInstance extends CellInstance
 {

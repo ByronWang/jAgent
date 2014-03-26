@@ -1,4 +1,11 @@
-package agent.model;
+package agent.runtime;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import agent.model.Analyzer;
+import agent.model.Cell;
+import agent.model.Engine;
 
 
 public class RunnableInstance implements Analyzer {
@@ -19,7 +26,7 @@ public class RunnableInstance implements Analyzer {
 	private long signal = 0;
 	private boolean fresh = false;
 	private static WordInstance[] matchingBuffer = new WordInstance[BASE_LENGTH];
-	private Candidator<CellInstance> candidate = new Candidator<CellInstance>();
+	private List<CellInstance> candidate = new ArrayList<CellInstance>();
 
 	private java.util.ArrayList<Integer> activeStack = new java.util.ArrayList<Integer>();
 
@@ -102,22 +109,22 @@ public class RunnableInstance implements Analyzer {
 		// System.Console.WriteLine(sample);
 		// }
 		// tmp.Clear();
-		candidate.Clear();
+		candidate.clear();
 		activeStack.clear();
 
 		int startIndex = 0;
 		for (int i = 0; i < sample.length(); i++) {
 			char c = sample.charAt(i);
 			if (!Character.isLetter(c)) {
-				if (i - startIndex > 1 && candidate.getItem(startIndex).getCell().getLength() < i - startIndex) {
+				if (i - startIndex > 1 && candidate.get(startIndex).getCell().getLength() < i - startIndex) {
 					Cell cell = createSubCell(candidate, startIndex, i);
-					candidate.setItem(startIndex, candidate.getItem(startIndex).sibling(cell.getConvex().get(0)));
+					candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getConvex().get(0)));
 				}
 				startIndex = i + 1;
 			}
 
 			CellInstance charCell = new CharCellInstance(this.engine.getItem((int) sample.charAt(i)), signal, i);
-			candidate.Add(charCell);
+			candidate.add(charCell);
 			charCell.succeed(this, candidate);
 
 			// checkDead(i);
@@ -128,27 +135,27 @@ public class RunnableInstance implements Analyzer {
 			// temp.exec(sample, candidate);
 			// }
 		}
-		if (startIndex > 0 && candidate.getCount() - startIndex > 1 && candidate.getItem(startIndex).getCell().getLength() < candidate.getCount() - startIndex) {
-			Cell cell = createSubCell(candidate, startIndex, candidate.getCount());
-			candidate.setItem(startIndex, candidate.getItem(startIndex).sibling(cell.getConvex().get(0)));
+		if (startIndex > 0 && candidate.size() - startIndex > 1 && candidate.get(startIndex).getCell().getLength() < candidate.size() - startIndex) {
+			Cell cell = createSubCell(candidate, startIndex, candidate.size());
+			candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getConvex().get(0)));
 		}
 
-		if (candidate.getItem(0).getCell().getLength() < candidate.getCount()) {
+		if (candidate.get(0).getCell().getLength() < candidate.size()) {
 			fresh = true;
 		} else {
-			this.cell = candidate.getItem(0).getCell();
+			this.cell = candidate.get(0).getCell();
 			fresh = false;
 		}
 		return this;
 	}
 
-	private Cell createSubCell(Candidator<CellInstance> can, int startIndex, int nextIndex) {
+	private Cell createSubCell(List<CellInstance> can, int startIndex, int nextIndex) {
 		if (nextIndex - startIndex == 1) {
-			return can.getItem(startIndex).getCell();
+			return can.get(startIndex).getCell();
 		} else {
 			Cell subCell = new Cell();
 			for (int j = startIndex; j < nextIndex;) {
-				Cell sc = can.getItem(j).getCell();
+				Cell sc = can.get(j).getCell();
 				subCell.comeFrom(sc);
 				j += sc.getLength();
 			}
@@ -159,8 +166,8 @@ public class RunnableInstance implements Analyzer {
 
 	private Cell add() {
 		cell = new Cell();
-		for (int j = 0; j < candidate.getCount();) {
-			Cell sc = candidate.getItem(j).getCell();
+		for (int j = 0; j < candidate.size();) {
+			Cell sc = candidate.get(j).getCell();
 			cell.comeFrom(sc);
 			j += sc.getLength();
 		}

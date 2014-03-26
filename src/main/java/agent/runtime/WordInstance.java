@@ -1,4 +1,10 @@
-package agent.model;
+package agent.runtime;
+
+import java.util.List;
+
+import agent.model.Analyzer;
+import agent.model.Cell;
+import agent.model.Link;
 
 public class WordInstance extends CellInstance
 {
@@ -33,7 +39,7 @@ public class WordInstance extends CellInstance
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Analyzer analyzer, Candidator<CellInstance> candidate, Link l, int srcIndex)
+	public final void act(Analyzer analyzer, List<CellInstance> candidate, Link l, int srcIndex)
 	{
 		if (this.nextCandidateIndex == srcIndex && l.getConvexIndex() == this.nextConvexIndex)
 		{
@@ -43,7 +49,7 @@ public class WordInstance extends CellInstance
 			// succeed
 			if (this.convexStartIndex == 0 && nextConvexIndex == this.cell.getConvex().size())
 			{
-				candidate.setItem(this.startFrom, this);
+				candidate.set(this.startFrom, this);
 				analyzer.setItem(this.cell.index, null);
 				this.succeed(analyzer, candidate);
 			}

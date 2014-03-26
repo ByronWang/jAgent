@@ -2,6 +2,10 @@ package agent.model;
 
 import java.io.IOException;
 
+import util.Savable;
+import util.TypeReader;
+import util.TypeWriter;
+
 
 public class Cell implements Savable {
 	public Cell() {
