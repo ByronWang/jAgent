@@ -16,7 +16,7 @@ public abstract class CellInstance {
 	}
 
 	public final void succeed(Analyzer analyzer, List<CellInstance> candidate) {
-		for (Link link : cell.getConcave()) {
+		for (Link link : cell.getParents()) {
 			if (link.getConvexIndex() > 0) {
 				WordInstance w = analyzer.getItem(link.getTo().index);
 				if (w != null) {
@@ -27,7 +27,7 @@ public abstract class CellInstance {
 			}
 		}
 
-		for (Link link : cell.getConcave()) {
+		for (Link link : cell.getParents()) {
 			if (link.getConvexIndex() == 0) {
 				if (link.getTo().getLength() > 1) {
 					analyzer.setItem(link.getTo().index, this.sibling(link));
@@ -45,6 +45,6 @@ public abstract class CellInstance {
 
 	@Override
 	public String toString() {
-		return this.cell.getValue().toString() + " : ";
+		return this.cell.toString().toString() + " : ";
 	}
 }

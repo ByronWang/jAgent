@@ -17,7 +17,7 @@ public class CharCellInstance extends CellInstance
 	@Override
 	public String toString()
 	{
-		return this.cell.getValue().toString();
+		return this.cell.toString().toString();
 	}
 
 }

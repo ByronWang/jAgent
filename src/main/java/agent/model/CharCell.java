@@ -11,7 +11,7 @@ public class CharCell extends Cell {
 	}
 
 	@Override
-	public String getValue() {
+	public String toString() {
 		return Character.toString((char) index);
 	}
 }

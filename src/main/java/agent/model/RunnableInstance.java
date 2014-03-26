@@ -158,7 +158,7 @@ public class RunnableInstance implements Analyzer {
 			if (!Character.isLetter(c)) { // 如果不是字符
 				if (i - from > 1 && candidate.get(from).cell.getLength() < i - from) { // 如果之前已经积累值了，则关闭前一个选择
 					Cell cell = createSubCell(candidate, from, i);
-					candidate.set(from, candidate.get(from).sibling(cell.getConvex().get(0)));
+					candidate.set(from, candidate.get(from).sibling(cell.getChildren().get(0)));
 				}
 				from = i + 1;
 				to = from;
@@ -177,7 +177,7 @@ public class RunnableInstance implements Analyzer {
 
 		if (from > 0 && to - from > 1 && candidate.get(from).cell.getLength() < candidate.size() - from) { // 如果之前已经积累值了，则关闭前一个选择
 			Cell cell = createSubCell(candidate, from, to);
-			candidate.set(from,candidate.get(from).sibling(cell.getConvex().get(0)));
+			candidate.set(from,candidate.get(from).sibling(cell.getChildren().get(0)));
 		}
 
 		if (candidate.get(0).cell.getLength() < to) {

@@ -74,7 +74,7 @@ public class Form1 extends Form
 
 		for (int i = 0; i < 0x10000; i++)
 		{
-			if (engine.getCells().get(i).getConcave().size() > 0)
+			if (engine.getCells().get(i).getParents().size() > 0)
 			{
 				cells.add(engine.getCells().get(i));
 			}

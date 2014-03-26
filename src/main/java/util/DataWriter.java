@@ -1,4 +1,4 @@
-package agent.model;
+package util;
 
 import java.io.IOException;
 

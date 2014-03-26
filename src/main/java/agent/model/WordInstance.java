@@ -23,7 +23,7 @@ public class WordInstance extends CellInstance {
 			this.nextCandidateIndex += l.getFrom().getLength();
 
 			// succeed
-			if (this.convexStartIndex == 0 && nextConvexIndex == this.cell.getConvex().size()) {
+			if (this.convexStartIndex == 0 && nextConvexIndex == this.cell.getChildren().size()) {
 				candidate.set(this.startFrom,this);
 				analyzer.setItem(this.cell.index, null);
 				this.succeed(analyzer, candidate);
@@ -62,6 +62,6 @@ public class WordInstance extends CellInstance {
 
 	@Override
 	public String toString() {
-		return this.cell.getValue().toString() + " : " + this.nextConvexIndex;
+		return this.cell.toString().toString() + " : " + this.nextConvexIndex;
 	}
 }

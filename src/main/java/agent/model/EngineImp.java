@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import util.AnalyzerListenHandler;
+import util.DataWriter;
+import util.DateReader;
 import util.Savable;
 
 public class EngineImp implements Engine, Savable {
@@ -75,8 +77,8 @@ public class EngineImp implements Engine, Savable {
 		}
 
 		for (int i = BASE_LENGTH; i < count; i++) {
-			for (Link link : cells.get(i).getConvex()) {
-				link.getFrom().getConcave().add(link);
+			for (Link link : cells.get(i).getChildren()) {
+				link.getFrom().getParents().add(link);
 			}
 		}
 

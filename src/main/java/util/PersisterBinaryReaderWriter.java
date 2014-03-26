@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import agent.model.DataWriter;
-import agent.model.DateReader;
 import agent.model.Engine;
 
 public class PersisterBinaryReaderWriter implements DateReader, DataWriter {

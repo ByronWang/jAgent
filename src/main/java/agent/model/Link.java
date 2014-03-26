@@ -2,6 +2,8 @@ package agent.model;
 
 import java.io.IOException;
 
+import util.DataWriter;
+import util.DateReader;
 import util.Savable;
 
 public class Link implements Savable {

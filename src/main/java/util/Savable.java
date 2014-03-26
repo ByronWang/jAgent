@@ -2,8 +2,6 @@ package util;
 
 import java.io.IOException;
 
-import agent.model.DataWriter;
-import agent.model.DateReader;
 import agent.model.Engine;
 
 public interface Savable {

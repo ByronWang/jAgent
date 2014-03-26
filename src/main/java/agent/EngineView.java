@@ -132,7 +132,7 @@ public class EngineView extends ScrollableControl
 		public Span(Cell cell, Font font, Brush brush, Point position, SizeF size)
 		{
 			this.cell = cell;
-			this.value = cell.getValue();
+			this.value = cell.toString();
 			this.font = font;
 			this.position = position;
 			this.size = size;
@@ -292,34 +292,34 @@ public class EngineView extends ScrollableControl
 		panel.height = panel.font.getHeight() + 4;
 
 		Line line = panel.newLine(); // title
-		if (cell.getConvex().isEmpty())
+		if (cell.getChildren().isEmpty())
 		{
-			line.newSpan(cell, panel.titleFont, panel.titleBrush, g.MeasureString(cell.getValue(), panel.titleFont));
+			line.newSpan(cell, panel.titleFont, panel.titleBrush, g.MeasureString(cell.toString(), panel.titleFont));
 		}
 		else
 		{
-			for (Link l : cell.getConvex())
+			for (Link l : cell.getChildren())
 			{
-				line.newSpan(l.getFrom(), panel.titleFont, panel.titleBrush, g.MeasureString(l.getFrom().getValue(), panel.titleFont));
+				line.newSpan(l.getFrom(), panel.titleFont, panel.titleBrush, g.MeasureString(l.getFrom().toString(), panel.titleFont));
 				line.newSpan((new Short(l.getWeight())).toString(), panel.font, panel.brush, g.MeasureString((new Short(l.getWeight())).toString(), panel.titleFont));
 			}
 		}
 
 		line = panel.newLine(); // graw line
 
-		for (Link c : cell.getConcave())
+		for (Link c : cell.getParents())
 		{
 			line = panel.newLine(c.getTo());
 			line.newSpan((new Short(c.getWeight())).toString(), g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
-			for (Link l : c.getTo().getConvex())
+			for (Link l : c.getTo().getChildren())
 			{
 				if (l != c)
 				{
-					line.newSpan(l.getFrom(), panel.brush, g.MeasureString(l.getFrom().getValue(), panel.font));
+					line.newSpan(l.getFrom(), panel.brush, g.MeasureString(l.getFrom().toString(), panel.font));
 				}
 				else
 				{
-					line.newSpan(l.getFrom(), panel.mainItemBrush, g.MeasureString(l.getFrom().getValue(), panel.font));
+					line.newSpan(l.getFrom(), panel.mainItemBrush, g.MeasureString(l.getFrom().toString(), panel.font));
 				}
 			}
 			line.newSpan(c.getTo(), "\u21d2", panel.font, panel.brush, g.MeasureString((new Short(c.getWeight())).toString(), panel.font));
