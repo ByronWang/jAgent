@@ -50,9 +50,10 @@ public class Engine implements Savable {
 
 	public final Cell find(String sample) {
 
-		Analyzer a = Analyzer.Instance(this).run(sample);
+		Analyzer a = Analyzer.Instance(this);
+		Cell sentence = a.run(sample);
 		if (!a.isFresh()) {
-			return a.getCell();
+			return sentence;
 		}
 		return null;
 	}
@@ -88,11 +89,11 @@ public class Engine implements Savable {
 
 	}
 
-//	public final Cell newCell() {
-//		Cell cell = new Cell(cells.size());
-//		cells.add(cell);
-//		return cell;
-//	}
+	// public final Cell newCell() {
+	// Cell cell = new Cell(cells.size());
+	// cells.add(cell);
+	// return cell;
+	// }
 
 	public void save(Engine engine, DataWriter v) throws IOException {
 		// all cell count

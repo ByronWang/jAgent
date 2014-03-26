@@ -3,12 +3,11 @@ package agent.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.AnalyzerListenHandlerImp;
 import agent.model.Cell;
 import agent.model.Engine;
 
-import util.AnalyzerListenHandlerImp;
-
-public class Analyzer{
+public class Analyzer {
 	public static final int BASE_LENGTH = 0x10000;
 	private static WordInstance[] matchingBuffer = new WordInstance[BASE_LENGTH];
 	public static final int MAX_LENGTH = 0x20000;
@@ -23,7 +22,6 @@ public class Analyzer{
 	private AnalyzerListenHandlerImp analyzerListen = new AnalyzerListenHandlerImp();
 
 	private List<CellInstance> candidate;
-	protected Cell cell = null;
 	private Engine engine;
 	private boolean isNewSentence = false;
 
@@ -31,18 +29,6 @@ public class Analyzer{
 
 	private Analyzer(Engine engine) {
 		this.engine = engine;
-	}
-
-	private Cell add() {
-		cell = new Cell();
-		for (int j = 0; j < candidate.size();) {
-			Cell sc = candidate.get(j).cell;
-			cell.comeFrom(sc);
-			j += sc.getLength();
-		}
-		this.engine.add(cell);
-
-		return cell;
 	}
 
 	// private void checkDead(int index)
@@ -98,10 +84,6 @@ public class Analyzer{
 		return this.analyzerListen;
 	}
 
-	public final Cell getCell() {
-		return cell;
-	}
-
 	public final WordInstance getItem(int index) {
 		index -= BASE_LENGTH;
 		if (matchingBuffer[index] == null) // hasn't matched word
@@ -145,7 +127,7 @@ public class Analyzer{
 		// oldCell.addTos(newLink);
 	}
 
-	public final Analyzer run(String strSample) {
+	public final Cell run(String strSample) {
 		signal = SIGNAL_SEED++;
 
 		char[] sample = strSample.toCharArray();
@@ -180,22 +162,34 @@ public class Analyzer{
 
 		if (from > 0 && to - from > 1 && candidate.get(from).cell.getLength() < candidate.size() - from) { // 如果之前已经积累值了，则关闭前一个选择
 			Cell cell = createSubCell(candidate, from, to);
-			candidate.set(from,candidate.get(from).sibling(cell.getChildren().get(0)));
+			candidate.set(from, candidate.get(from).sibling(cell.getChildren().get(0)));
 		}
 
+		Cell sentence;
 		if (candidate.get(0).cell.getLength() < to) {
+			sentence = makeCell();
 			isNewSentence = true;
 		} else {
-			this.cell = candidate.get(0).cell;
 			isNewSentence = false;
+			sentence = candidate.get(0).cell;
 		}
-		return this;
+
+		return sentence;
 	}
 
-	public final Analyzer runAndAdd(String sample) {
-		this.run(sample);
-		this.add();
-		return this;
+	private Cell makeCell() {
+		Cell cell = new Cell();
+		for (int j = 0; j < candidate.size();) {
+			Cell sc = candidate.get(j).cell;
+			cell.comeFrom(sc);
+			j += sc.getLength();
+		}
+		return cell;
+	}
+
+	public final void runAndAdd(String sample) {
+		Cell sentence = this.run(sample);
+		this.engine.add(sentence);
 	}
 
 	public final void setAnalyzerListen(AnalyzerListenHandlerImp value) {
