@@ -3,6 +3,9 @@ package agent.model;
 import java.io.IOException;
 import java.util.List;
 
+import agent.runtime.Analyzer;
+import agent.runtime.CellInstance;
+
 import util.AnalyzerListenHandler;
 import util.DataWriter;
 import util.DateReader;

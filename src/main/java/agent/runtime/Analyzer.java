@@ -1,7 +1,10 @@
-package agent.model;
+package agent.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import agent.model.Cell;
+import agent.model.Engine;
 
 import util.AnalyzerListenHandlerImp;
 

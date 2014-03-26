@@ -2,7 +2,7 @@ package util;
 
 import java.util.List;
 
-import agent.model.CellInstance;
+import agent.runtime.CellInstance;
 
 public class AnalyzerListenHandlerImp extends ListenHandler<AnalyzerListenHandler> implements AnalyzerListenHandler {
 

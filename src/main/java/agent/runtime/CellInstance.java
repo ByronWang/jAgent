@@ -1,6 +1,9 @@
-package agent.model;
+package agent.runtime;
 
 import java.util.List;
+
+import agent.model.Cell;
+import agent.model.Link;
 
 public abstract class CellInstance {
 	public Cell cell = null;
