@@ -22,20 +22,20 @@ public abstract class ActivatedCell
 		this.indexFrom = index;
 	}
 
-	public final void activate(Context analyzer, List<ActivatedCell> buffer)
+	public final void activate(Context context, List<ActivatedCell> buffer)
 	{
 		for (Link link : value.getParents())
 		{
 			if (link.offset > 0)
 			{
-				ActivatedWord w = analyzer.getItem(link.to.valueIndex);
-				if (w != null) // 如果已经激活,确认是否匹配成功
+				ActivatedWord word = context.getItem(link.to.valueIndex);
+				if (word != null) // 如果已经激活,确认是否匹配成功
 				{
-					w.act(analyzer, buffer, link, this.indexFrom); // ?????
+					word.tryMatch(context, buffer, link, this.indexFrom); // ?????
 				}
 				else
 				{
-					//analyzer[link.To.index] = this.sibling(link);
+					//context[link.To.index] = this.sibling(link);
 				}
 			}
 		}
@@ -46,13 +46,13 @@ public abstract class ActivatedCell
 			{
 				if (link.to.getLength() > 1)
 				{
-					analyzer.setItem(link.to.valueIndex, this.sibling(link));
+					context.setItem(link.to.valueIndex, this.sibling(link));
 				}
 				else
 				{
 					ActivatedWord w = this.sibling(link);
 					buffer.set(this.indexFrom, w);
-					w.activate(analyzer, buffer);
+					w.activate(context, buffer);
 				}
 			}
 		}
