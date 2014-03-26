@@ -38,7 +38,7 @@ public class ActivatedWord extends ActivatedCell
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Context analyzer, List<ActivatedCell> buffer, Link l, int curIndex)
+	public final void tryMatch(Context context, List<ActivatedCell> buffer, Link l, int curIndex)
 	{
 		if (this.nextCandidateIndex == curIndex && l.offset == this.nextConvexIndex)
 		{
@@ -49,13 +49,13 @@ public class ActivatedWord extends ActivatedCell
 			if (this.offset == 0 && nextConvexIndex == this.value.getChildren().size())
 			{
 				buffer.set(this.indexFrom, this);
-				analyzer.setItem(this.value.valueIndex, null);
-				this.activate(analyzer, buffer);
+				context.setItem(this.value.valueIndex, null);
+				this.activate(context, buffer);
 			}
 		}
 		if (this.getNext() != null)
 		{
-			this.getNext().act(analyzer, buffer, l, curIndex);
+			this.getNext().tryMatch(context, buffer, l, curIndex);
 		}
 	}
 
