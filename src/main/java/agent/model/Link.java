@@ -54,12 +54,12 @@ public class Link implements Savable {
 
 	public void save(Engine engine, DataWriter v) throws IOException {
 		// v.save(strength);
-		v.save(from.index);
+//		v.save(from.index);
 	}
 
 	public void load(Engine engine, DateReader v) throws IOException {
 		// strength = v.readShort();
-		from = engine.getCells().get(v.readInt());
+//		from = engine.getCells().get(v.readInt());
 	}
 
 	@Override
