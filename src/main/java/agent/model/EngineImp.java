@@ -100,14 +100,14 @@ public class EngineImp implements Engine, Savable {
 	}
 
 	public final void trainNew(String sample) {
-		Analyzer a = RunnableInstance.Instance(this);
+		Analyzer a = Analyzer.Instance(this);
 		a.getAnalyzerListen().add(analyzerListenHandler);
 		a.runAndAdd(sample);
 	}
 
 	public final Cell find(String sample) {
 
-		Analyzer a = RunnableInstance.Instance(this).run(sample);
+		Analyzer a = Analyzer.Instance(this).run(sample);
 		if (!a.isFresh()) {
 			return a.getCell();
 		}
