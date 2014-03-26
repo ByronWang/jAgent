@@ -38,7 +38,7 @@ public class WordInstance extends CellInstance
 		this.nextCandidateIndex = nextCandidateIndex;
 	}
 
-	public final void act(Analyzer analyzer, List<CellInstance> candidate, Link l, int srcIndex)
+	public final void act(Analyzer analyzer, List<CellInstance> buffer, Link l, int srcIndex)
 	{
 		if (this.nextCandidateIndex == srcIndex && l.getOffset() == this.nextConvexIndex)
 		{
@@ -48,14 +48,14 @@ public class WordInstance extends CellInstance
 			// succeed
 			if (this.convexStartIndex == 0 && nextConvexIndex == this.cell.getConvex().size())
 			{
-				candidate.set(this.startFrom, this);
+				buffer.set(this.startFrom, this);
 				analyzer.setItem(this.cell.index, null);
-				this.activate(analyzer, candidate);
+				this.activate(analyzer, buffer);
 			}
 		}
 		if (this.getNext() != null)
 		{
-			this.getNext().act(analyzer, candidate, l, srcIndex);
+			this.getNext().act(analyzer, buffer, l, srcIndex);
 		}
 	}
 

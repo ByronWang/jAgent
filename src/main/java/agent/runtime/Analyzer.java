@@ -39,7 +39,7 @@ public class Analyzer {
 	private long signal = 0;
 	private boolean fresh = false;
 	private static WordInstance[] matchingBuffer = new WordInstance[BASE_LENGTH];
-	private List<CellInstance> candidate = new ArrayList<CellInstance>();
+	private List<CellInstance> buffer = new ArrayList<CellInstance>();
 
 	private java.util.ArrayList<Integer> activeStack = new java.util.ArrayList<Integer>();
 
@@ -117,23 +117,23 @@ public class Analyzer {
 		// System.Console.WriteLine(sample);
 		// }
 		// tmp.Clear();
-		candidate.clear();
+		buffer.clear();
 		activeStack.clear();
 
 		int startIndex = 0;
 		for (int i = 0; i < sample.length(); i++) {
 			char c = sample.charAt(i);
 			if (!Character.isLetter(c)) {
-				if (i - startIndex > 1 && candidate.get(startIndex).getCell().getLength() < i - startIndex) {
-					Cell cell = createSubCell(candidate, startIndex, i);
-					candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getConvex().get(0)));
+				if (i - startIndex > 1 && buffer.get(startIndex).getCell().getLength() < i - startIndex) {
+					Cell cell = createSubCell(buffer, startIndex, i);
+					buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getConvex().get(0)));
 				}
 				startIndex = i + 1;
 			}
 
 			CellInstance charCell = new CharCellInstance(this.engine.getItem((int) sample.charAt(i)), signal, i);
-			candidate.add(charCell);
-			charCell.activate(this, candidate);
+			buffer.add(charCell);
+			charCell.activate(this, buffer);
 
 			// checkDead(i);
 
@@ -143,15 +143,15 @@ public class Analyzer {
 			// temp.exec(sample, candidate);
 			// }
 		}
-		if (startIndex > 0 && candidate.size() - startIndex > 1 && candidate.get(startIndex).getCell().getLength() < candidate.size() - startIndex) {
-			Cell cell = createSubCell(candidate, startIndex, candidate.size());
-			candidate.set(startIndex, candidate.get(startIndex).sibling(cell.getConvex().get(0)));
+		if (startIndex > 0 && buffer.size() - startIndex > 1 && buffer.get(startIndex).getCell().getLength() < buffer.size() - startIndex) {
+			Cell cell = createSubCell(buffer, startIndex, buffer.size());
+			buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getConvex().get(0)));
 		}
 
-		if (candidate.get(0).getCell().getLength() < candidate.size()) {
+		if (buffer.get(0).getCell().getLength() < buffer.size()) {
 			fresh = true;
 		} else {
-			this.cell = candidate.get(0).getCell();
+			this.cell = buffer.get(0).getCell();
 			fresh = false;
 		}
 		return this;
@@ -174,8 +174,8 @@ public class Analyzer {
 
 	private Cell add() {
 		cell = new Cell();
-		for (int j = 0; j < candidate.size();) {
-			Cell sc = candidate.get(j).getCell();
+		for (int j = 0; j < buffer.size();) {
+			Cell sc = buffer.get(j).getCell();
 			cell.comeFrom(sc);
 			j += sc.getLength();
 		}

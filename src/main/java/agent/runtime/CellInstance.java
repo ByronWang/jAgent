@@ -22,7 +22,7 @@ public abstract class CellInstance
 		this.startFrom = index;
 	}
 
-	public final void activate(Analyzer analyzer, List<CellInstance> candidate)
+	public final void activate(Analyzer analyzer, List<CellInstance> buffer)
 	{
 		for (Link link : cell.getParents())
 		{
@@ -31,7 +31,7 @@ public abstract class CellInstance
 				WordInstance w = analyzer.getItem(link.getTo().index);
 				if (w != null) // 如果已经激活
 				{
-					w.act(analyzer, candidate, link, this.startFrom); // ?????
+					w.act(analyzer, buffer, link, this.startFrom); // ?????
 				}
 				else
 				{
@@ -51,8 +51,8 @@ public abstract class CellInstance
 				else
 				{
 					WordInstance w = this.sibling(link);
-					candidate.set(this.startFrom, w);
-					w.activate(analyzer, candidate);
+					buffer.set(this.startFrom, w);
+					w.activate(analyzer, buffer);
 				}
 			}
 		}
