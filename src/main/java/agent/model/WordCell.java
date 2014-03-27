@@ -1,0 +1,118 @@
+package agent.model;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import util.TypeReader;
+import util.TypeWriter;
+
+public class WordCell extends Cell {
+
+	protected List<Link> children = new ArrayList<>();
+	protected List<Link> parents = new ArrayList<>();
+
+	private int length = 0;
+
+	public int valueIndex = 0;
+
+	protected WordCell() {
+	}
+
+	protected WordCell(int valueIndex) {
+		this.valueIndex = valueIndex;
+	}
+
+	public WordCell comeFrom(Cell child) {
+		Link newLink = new Link();
+		newLink.from = child;
+		newLink.to = this;
+		newLink.indexInParent = this.children.size();
+		newLink.weight = 1;
+
+		this.children.add(newLink);
+		child.getParents().add(newLink);
+		// cell.reinforce();
+		length += child.getLength();
+		return this;
+	}
+
+	public List<Link> getChildren() {
+		return this.children;
+	}
+
+	public int getLength() {
+		if(length<1){
+			relink();
+		}
+		return length;
+	}
+
+	@Override
+	public List<Link> getParents() {
+		return this.parents;
+	}
+
+	public void load(Engine engine, TypeReader v) throws IOException {
+		v.readString(); // value
+		// convex
+		int count = v.readInt();
+
+		for (int i = 0; i < count; i++) {
+			Link l = new Link();
+			l.to = this;
+			l.indexInParent = i;
+			// ((Savable) l).load(engine, v);
+			l.from = engine.getCells().get(v.readInt());
+			children.add(l);
+		}
+		v.clearReader();
+	}
+
+	public void relink(){				
+		for (Link link : children) {
+			link.from.getParents().add(link);
+			length+=link.from.getLength();
+		}
+	}
+
+	public void save(Engine engine, TypeWriter v) throws IOException {
+		v.save(this.toString());
+
+		// convex
+		v.save(children.size());
+
+		for (Link l : children) {
+			// ((Savable) l).save(engine, v);
+			v.save(l.from.valueIndex);
+		}
+		v.clearWrite();
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		for (Link l : this.children) {
+			sb.append(l.from.toString());
+		}
+		sb.append(']');
+		return sb.toString();
+	}
+	// public final Cell getChild(int index) {
+	// if (this.children.size() > 0) {
+	// int i = index;
+	// for (Link l : this.children) {
+	// Cell cell = l.from;
+	// if (cell.getLength() > i) {
+	// return cell.getChild(i);
+	// } else {
+	// i -= cell.getLength();
+	// }
+	//
+	// }
+	// } else if (index == 0) {
+	// return this;
+	// }
+	// return null;
+	// }
+}

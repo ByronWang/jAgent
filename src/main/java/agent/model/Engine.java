@@ -9,6 +9,10 @@ import agent.runtime.Context;
 
 public class Engine implements Savable {
 	public static final int BASE_LENGTH = 0x10000;
+	public static final int WORD_LENGTH = BASE_LENGTH + BASE_LENGTH;
+	public static final int BEGINE_OF_WORD = BASE_LENGTH;
+	public static final int BEGINE_OF_SENTENCE = WORD_LENGTH;
+	
 	// AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler()
 	// {
 	//
@@ -28,6 +32,7 @@ public class Engine implements Savable {
 	// };
 
 	private java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(BASE_LENGTH + BASE_LENGTH);
+	private java.util.ArrayList<Cell> sentences = new java.util.ArrayList<Cell>(BASE_LENGTH);
 
 	public final java.util.ArrayList<Cell> getCells() {
 		return cells;
@@ -56,6 +61,13 @@ public class Engine implements Savable {
 		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
 			((Savable) cells.get(i)).save(engine, v);
 		}
+		
+		v.save(sentences.size());
+		v.clearWrite();
+
+		for (int i = 0; i < this.sentences.size(); i++) {
+			((Savable) sentences.get(i)).save(engine, v);
+		}
 	}
 
 	public void load(Engine engine, TypeReader r) throws IOException {
@@ -63,22 +75,34 @@ public class Engine implements Savable {
 		this.clear();
 
 		// all cell count
-		int count = r.readInt() + BASE_LENGTH;
+		int cntWord = r.readInt() + BASE_LENGTH;
 		r.clearReader();
 
-		for (int i = BASE_LENGTH; i < count; i++) {
+		for (int i = BASE_LENGTH; i < cntWord; i++) {
 			cells.add(Cell.newWord(i));
 		}
-		for (int i = BASE_LENGTH; i < count; i++) {
+		
+		for (int i = BASE_LENGTH; i < cntWord; i++) {
 			((Savable) cells.get(i)).load(engine, r);
 		}
 
-		for (int i = BASE_LENGTH; i < count; i++) {
-			for (Link link : cells.get(i).getChildren()) {
+		for (int i = BASE_LENGTH; i < cntWord; i++) {
+			WordCell wc =(WordCell)cells.get(i);
+			for (Link link : wc.getChildren()) {
 				link.from.getParents().add(link);
 			}
 		}
+		
+		// all sentence count
+		int cntSentence = r.readInt();
+		r.clearReader();
 
+		for (int i = 0; i < cntSentence; i++) {
+			sentences.add(Cell.newSentence(i));
+		}
+		for (int i = 0; i < cntSentence; i++) {
+			((Savable) sentences.get(i)).load(engine, r);
+		}
 	}
 
 	public final void clear() {
@@ -177,10 +201,16 @@ public class Engine implements Savable {
 	// }
 	// return newls;
 	// }
-
-	public final Cell add(Cell cell) {
-		cell.valueIndex = cells.size();
-		cells.add(cell);
+	
+	public final Cell addNewWord(Cell cell){
+		cell.valueIndex =cells.size();
+		this.cells.add(cell);
+		return cell;
+	}
+	
+	public final Cell addSentence(Cell cell){
+		cell.valueIndex =sentences.size();
+		this.sentences.add(cell);
 		return cell;
 	}
 

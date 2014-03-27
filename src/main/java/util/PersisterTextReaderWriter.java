@@ -65,26 +65,26 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 
 	public void save(String v) throws IOException {
 		w.write(encode(v));
-		w.write(";");
+//		w.write('\n');
 	}
 
 	public void save(int v) throws IOException {
-		w.write(v);
-		w.write(";");
+//		w.write(v);
+//		w.write(";");
 	}
 
 	public void save(short v) throws IOException {
-		w.write(v);
-		w.write(";");
+//		w.write(v);
+//		w.write(";");
 	}
 
 	public void save(byte v) throws IOException {
-		w.write(v);
-		w.write(";");
+//		w.write(v);
+//		w.write(";");
 	}
 
 	public void clearWrite() throws IOException {
-		w.write("/n");
+		w.write("\n");
 	}
 
 	public String readString() {

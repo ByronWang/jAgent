@@ -5,6 +5,8 @@ import java.util.List;
 
 import agent.model.Cell;
 import agent.model.Engine;
+import agent.model.SentenceCell;
+import agent.model.WordCell;
 
 public class Context {
 	public static void trainNew(Engine engine, String sample) {
@@ -19,12 +21,6 @@ public class Context {
 		if (instance != null) return instance;
 		instance = new Context(engine);
 		return instance;
-	}
-
-	protected Cell sentence = null;
-
-	final Cell getCell() {
-		return sentence;
 	}
 
 	static final int BASE_LENGTH = 0x10000;
@@ -134,12 +130,12 @@ public class Context {
 			buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
 		}
 
-		if (buffer.get(0).cell().getLength() < buffer.size()) {
-			fresh = true;
-		} else {
-			this.sentence = buffer.get(0).cell();
-			fresh = false;
-		}
+//		if (buffer.get(0).cell().getLength() < buffer.size()) {
+//			fresh = true;
+//		} else {
+//			this.sentence = buffer.get(0).cell();
+//			fresh = false;
+//		}
 		return this;
 	}
 
@@ -147,25 +143,25 @@ public class Context {
 		if (indexTo - indexFrom == 1) {
 			return buffer.get(indexFrom).cell();
 		} else {
-			Cell newWord = Cell.newWord();
+			WordCell newWord = Cell.newWord();
 			for (int j = indexFrom; j < indexTo;) {
 				Cell sc = buffer.get(j).cell();
 				newWord.comeFrom(sc);
 				j += sc.getLength();
 			}
-			this.engine.add(newWord);
+			this.engine.addNewWord(newWord);
 			return newWord;
 		}
 	}
 
-	private Cell add() {
-		sentence = Cell.newSentence();
+	private Cell addNewSentence() {
+		SentenceCell sentence = Cell.newSentence();
 		for (int j = 0; j < buffer.size();) {
 			Cell sc = buffer.get(j).cell();
 			sentence.comeFrom(sc);
 			j += sc.getLength();
 		}
-		this.engine.add(sentence);
+		this.engine.addSentence(sentence);
 
 		return sentence;
 	}
@@ -193,7 +189,7 @@ public class Context {
 
 	final Context runAndAdd(String sample) {
 		this.run(sample);
-		this.add();
+		this.addNewSentence();
 		return this;
 	}
 
