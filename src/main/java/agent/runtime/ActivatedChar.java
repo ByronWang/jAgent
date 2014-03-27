@@ -14,13 +14,13 @@ public class ActivatedChar extends ActivatedCell
 	@Override
 	public String toString()
 	{
-		return this.value().toString().toString();
+		return this.cell().toString().toString();
 	}
 
 	@Override
 	public ActivatedWord sibling(Link l)
 	{
-		return new ActivatedWord(l.to, signal, indexFrom, l.offset, indexFrom + 1);
+		return new ActivatedWord(l.to, signal, indexInBuffer, l.indexInParent, indexInBuffer + 1);
 	}
 
 }

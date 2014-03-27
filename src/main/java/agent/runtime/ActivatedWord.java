@@ -7,9 +7,9 @@ import agent.model.Link;
 
 public class ActivatedWord extends ActivatedCell
 {
-	public int nextCandidateIndex;
-	private int nextConvexIndex;
-	private int offset;
+	public int indexOfNextInBuffer;
+	private int indexOfNextInParent;
+	private int indexInParent;
 
 	private ActivatedWord next = null;
 	private ActivatedWord previous = null;
@@ -30,51 +30,51 @@ public class ActivatedWord extends ActivatedCell
 		return previous;
 	}
 
-	public ActivatedWord(Cell cell, long signal, int indexFrom, int offset, int nextCandidateIndex)
+	public ActivatedWord(Cell cell, long signal, int indexInBuffer, int indexInParent, int indexOfNextCellInBuffer)
 	{
-		super(cell, signal, indexFrom);
-		this.offset = offset;
-		this.nextConvexIndex = offset + 1;
-		this.nextCandidateIndex = nextCandidateIndex;
+		super(cell, signal, indexInBuffer);
+		this.indexInParent = indexInParent;
+		this.indexOfNextInParent = indexInParent + 1;
+		this.indexOfNextInBuffer = indexOfNextCellInBuffer;
 	}
 
-	public final void tryMatch(Context context, List<ActivatedCell> buffer, Link l, int curIndex)
+	public final void tryMatch(Context context, List<ActivatedCell> buffer, Link l, int indexInBuffer)
 	{
-		if (this.nextCandidateIndex == curIndex && l.offset == this.nextConvexIndex)
+		if (this.indexOfNextInBuffer == indexInBuffer && l.indexInParent == this.indexOfNextInParent)
 		{
-			nextConvexIndex++;
-			this.nextCandidateIndex += l.from.getLength();
+			indexOfNextInParent++;
+			this.indexOfNextInBuffer += l.from.getLength();
 
 			// succeed
-			if (this.offset == 0 && nextConvexIndex == this.value.getChildren().size())
+			if (this.indexInParent == 0 && indexOfNextInParent == this.cell.getChildren().size())
 			{
-				buffer.set(this.indexFrom, this);
-				context.setItem(this.value.valueIndex, null);
+				buffer.set(this.indexInBuffer, this);
+				context.setItem(this.cell.valueIndex, null);
 				this.activate(context, buffer);
 			}
 		}
 		if (this.getNext() != null)
 		{
-			this.getNext().tryMatch(context, buffer, l, curIndex);
+			this.getNext().tryMatch(context, buffer, l, indexInBuffer);
 		}
 	}
 
 	public final void die(Context context)
 	{
-		if (nextConvexIndex - offset > 1)
+		if (indexOfNextInParent - indexInParent > 1)
 		{
-			context.reasign(this.value, offset, nextConvexIndex);
+			context.reasign(this.cell, indexInParent, indexOfNextInParent);
 		}
 	}
 
 	@Override
 	public String toString()
 	{
-		return this.value().toString().toString() + " : " + this.nextConvexIndex;
+		return this.cell().toString().toString() + " : " + this.indexOfNextInParent;
 	}
 	@Override
 	public ActivatedWord sibling(Link l)
 	{
-		return new ActivatedWord(l.to, signal, indexFrom, l.offset, nextCandidateIndex);
+		return new ActivatedWord(l.to, signal, indexInBuffer, l.indexInParent, indexOfNextInBuffer);
 	}
 }

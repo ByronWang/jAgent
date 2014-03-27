@@ -7,26 +7,18 @@ import util.TypeWriter;
 
 public class CharCell extends Cell {
 	public CharCell(int index) {
-		this.valueIndex = index;
-	}
-
-	@Override
-	public int getLength() {
-		return 1;
+		super(index);
+		this.length = 1;
 	}
 
 	@Override
 	public String toString() {
-		return Character.toString((char) valueIndex);
+		return String.valueOf((char) valueIndex);
 	}
 
 	public void save(Engine engine, TypeWriter v) throws IOException {
 	}
 
 	public void load(Engine engine, TypeReader v) throws IOException {
-	}
-
-	public Cell comeFrom(Cell child) {
-		throw new RuntimeException();
 	}
 }

@@ -70,9 +70,10 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 		return (short) ((b1 << 8) | (b0 & 0xff));
 	}
 
-//	static private int makeInt(byte b3, byte b2, byte b1, byte b0) {
-//		return (((b3) << 21) | ((b2 & 0xff) << 14) | ((b1 & 0xff) << 7) | ((b0 & 0xff)));
-//	}
+	// static private int makeInt(byte b3, byte b2, byte b1, byte b0) {
+	// return (((b3) << 21) | ((b2 & 0xff) << 14) | ((b1 & 0xff) << 7) | ((b0 &
+	// 0xff)));
+	// }
 
 	private static byte char1(char x) {
 		return (byte) (x >> 8);
@@ -94,10 +95,11 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 	// private static byte int2(int x) { return (byte)(x >> 16); }
 	// private static byte int1(int x) { return (byte)(x >> 8); }
 	// private static byte int0(int x) { return (byte)(x ); }
-	
+
 	private static byte int4(int x) {
 		return (byte) (x >> 28 & 0x7F);
 	}
+
 	private static byte int3(int x) {
 		return (byte) (x >> 21 & 0x7F);
 	}
@@ -115,30 +117,31 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 	}
 
 	public void save(String x) throws IOException {
-		char[] ca = x.toCharArray();
-		save(ca.length);
-		for (int i = 0; i < ca.length; i++) {
-			char c = ca[i];
-			w.write(char1(c));
-			w.write(char0(c));
-		}
+		// char[] ca = x.toCharArray();
+		// save(ca.length);
+		// for (int i = 0; i < ca.length; i++) {
+		// char c = ca[i];
+		// w.write(char1(c));
+		// w.write(char0(c));
+		// }
 	}
 
 	public String readString() throws IOException {
-		int cnt = readInt();
-
-		StringBuilder sb = new StringBuilder(1024);
-
-		for (int j = 0; j < cnt; j += 512) {
-			int to = j + 512 > cnt ? cnt : j + 512;
-			for (int i = j; i < to; i++) {
-				char c = makeChar((byte) r.read(), (byte) r.read());
-				sb.append(c);
-			}
-			j = to;
-		}
-
-		return sb.toString();
+		// int cnt = readInt();
+		//
+		// StringBuilder sb = new StringBuilder(1024);
+		//
+		// for (int j = 0; j < cnt; j += 512) {
+		// int to = j + 512 > cnt ? cnt : j + 512;
+		// for (int i = j; i < to; i++) {
+		// char c = makeChar((byte) r.read(), (byte) r.read());
+		// sb.append(c);
+		// }
+		// j = to;
+		// }
+		//
+		// return sb.toString();
+		return null;
 	}
 
 	public void save(int x) throws IOException {
@@ -191,9 +194,9 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 			return (((b3) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
 		}
 
-		int b4 = (int) r.read();		
+		int b4 = (int) r.read();
 		return (((b4) << 28) | ((b3 & 0x7F) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
-		
+
 	}
 
 	public void save(short x) throws IOException {

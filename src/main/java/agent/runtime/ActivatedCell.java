@@ -7,31 +7,27 @@ import agent.model.Link;
 
 public abstract class ActivatedCell
 {
-	protected Cell value = null;
-	public final Cell value()
-	{
-		return value;
-	}
+	public int indexInBuffer;
 	public long signal;
-	public int indexFrom;
-
-	public ActivatedCell(Cell value, long signal, int index)
+	protected Cell cell = null;
+	
+	public ActivatedCell(Cell cell, long signal, int indexInBuffer)
 	{
-		this.value = value;
+		this.cell = cell;
 		this.signal = signal;
-		this.indexFrom = index;
+		this.indexInBuffer = indexInBuffer;
 	}
 
 	public final void activate(Context context, List<ActivatedCell> buffer)
 	{
-		for (Link link : value.getParents())
+		for (Link link : cell.getParents())
 		{
-			if (link.offset > 0)
+			if (link.indexInParent > 0)
 			{
 				ActivatedWord word = context.getItem(link.to.valueIndex);
 				if (word != null) // 如果已经激活,确认是否匹配成功
 				{
-					word.tryMatch(context, buffer, link, this.indexFrom); // ?????
+					word.tryMatch(context, buffer, link, this.indexInBuffer); // ?????
 				}
 				else
 				{
@@ -40,9 +36,9 @@ public abstract class ActivatedCell
 			}
 		}
 
-		for (Link link : value.getParents())
+		for (Link link : cell.getParents())
 		{
-			if (link.offset == 0)
+			if (link.indexInParent == 0)
 			{
 				if (link.to.getLength() > 1)
 				{
@@ -51,7 +47,7 @@ public abstract class ActivatedCell
 				else
 				{
 					ActivatedWord w = this.sibling(link);
-					buffer.set(this.indexFrom, w);
+					buffer.set(this.indexInBuffer, w);
 					w.activate(context, buffer);
 				}
 			}
@@ -62,9 +58,14 @@ public abstract class ActivatedCell
 		///#endregion
 
 	public abstract ActivatedWord sibling(Link l);
+
 	@Override
 	public String toString()
 	{
-		return this.value().toString().toString() + " : ";
+		return this.cell().toString().toString() + " : ";
+	}
+	public final Cell cell()
+	{
+		return cell;
 	}
 }

@@ -5,8 +5,6 @@ import java.util.List;
 
 import agent.model.Cell;
 import agent.model.Engine;
-import agent.model.Sentence;
-import agent.model.Word;
 
 public class Context {
 	public static void trainNew(Engine engine, String sample) {
@@ -23,10 +21,10 @@ public class Context {
 		return instance;
 	}
 
-	protected Cell cell = null;
+	protected Cell sentence = null;
 
 	final Cell getCell() {
-		return cell;
+		return sentence;
 	}
 
 	static final int BASE_LENGTH = 0x10000;
@@ -118,7 +116,7 @@ public class Context {
 		for (int i = 0; i < sample.length(); i++) {
 			char c = sample.charAt(i);
 			if (!Character.isLetter(c)) {
-				if (i - startIndex > 1 && buffer.get(startIndex).value().getLength() < i - startIndex) {
+				if (i - startIndex > 1 && buffer.get(startIndex).cell().getLength() < i - startIndex) {
 					Cell cell = createWord(buffer, startIndex, i);
 					buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
 				}
@@ -131,15 +129,15 @@ public class Context {
 
 			// checkDead(i);
 		}
-		if (startIndex > 0 && buffer.size() - startIndex > 1 && buffer.get(startIndex).value().getLength() < buffer.size() - startIndex) {
+		if (startIndex > 0 && buffer.size() - startIndex > 1 && buffer.get(startIndex).cell().getLength() < buffer.size() - startIndex) {
 			Cell cell = createWord(buffer, startIndex, buffer.size());
 			buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
 		}
 
-		if (buffer.get(0).value().getLength() < buffer.size()) {
+		if (buffer.get(0).cell().getLength() < buffer.size()) {
 			fresh = true;
 		} else {
-			this.cell = buffer.get(0).value();
+			this.sentence = buffer.get(0).cell();
 			fresh = false;
 		}
 		return this;
@@ -147,11 +145,11 @@ public class Context {
 
 	private Cell createWord(List<ActivatedCell> buffer, int indexFrom, int indexTo) {
 		if (indexTo - indexFrom == 1) {
-			return buffer.get(indexFrom).value();
+			return buffer.get(indexFrom).cell();
 		} else {
-			Cell newWord = new Word();
+			Cell newWord = Cell.newWord();
 			for (int j = indexFrom; j < indexTo;) {
-				Cell sc = buffer.get(j).value();
+				Cell sc = buffer.get(j).cell();
 				newWord.comeFrom(sc);
 				j += sc.getLength();
 			}
@@ -161,15 +159,15 @@ public class Context {
 	}
 
 	private Cell add() {
-		cell = new Sentence();
+		sentence = Cell.newSentence();
 		for (int j = 0; j < buffer.size();) {
-			Cell sc = buffer.get(j).value();
-			cell.comeFrom(sc);
+			Cell sc = buffer.get(j).cell();
+			sentence.comeFrom(sc);
 			j += sc.getLength();
 		}
-		this.engine.add(cell);
+		this.engine.add(sentence);
 
-		return cell;
+		return sentence;
 	}
 
 	final void reasign(Cell oldCell, int convexStartIndex, int nextConvexIndex) {

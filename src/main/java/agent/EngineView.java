@@ -10,7 +10,7 @@ public class EngineView extends ScrollableControl
 	}
 
 	private Cell cell = null;
-	public final Cell value()
+	public final Cell cell()
 	{
 		return cell;
 	}
@@ -33,7 +33,7 @@ public class EngineView extends ScrollableControl
 			this.cell = cell;
 		}
 		private Cell cell;
-		public final Cell value()
+		public final Cell cell()
 		{
 			return cell;
 		}

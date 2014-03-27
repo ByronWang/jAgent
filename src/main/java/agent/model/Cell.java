@@ -1,27 +1,128 @@
 package agent.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import util.Savable;
+import util.TypeReader;
+import util.TypeWriter;
 
-public abstract class Cell implements Savable {
+public class Cell implements Savable {
+
+	public static Cell newCharCell(int valueIndex) {
+		Cell charCell = new CharCell(valueIndex);
+		charCell.parents = new ArrayList<>();
+		return charCell;
+	}
+
+	public static Cell newSentence() {
+		Cell sentence = new Cell();
+		sentence.children = new java.util.ArrayList<Link>();
+		sentence.parents = new ArrayList<>();
+		return sentence;
+	}
+
+	public static Cell newWord() {
+		Cell word = new Cell();
+		word.children = new ArrayList<>();
+		word.parents = new ArrayList<>();
+		return word;
+	}
+
+	public static Cell newWord(int valueIndex) {
+		Cell word = new Cell(valueIndex);
+		word.children = new ArrayList<>();
+		word.parents = new ArrayList<>();
+		return word;
+	}
+
+	protected List<Link> children = null;
+	protected List<Link> parents = null;
+
+	int length = 0;
+
 	public int valueIndex = 0;
-	private java.util.ArrayList<Link> parents = new java.util.ArrayList<Link>();
-	protected java.util.ArrayList<Link> children = new java.util.ArrayList<Link>();
 
-	abstract public int getLength() ;
+	protected Cell() {
+	}
 
-	abstract public  Cell comeFrom(Cell child) ;
+	protected Cell(int valueIndex) {
+		this.valueIndex = valueIndex;
+	}
 
-	public ArrayList<Link> getChildren() {
+	public final Cell comeFrom(Cell child) {
+		Link newLink = new Link();
+		newLink.from = child;
+		newLink.to = this;
+		newLink.indexInParent = this.children.size();
+		newLink.weight = 1;
+
+		this.children.add(newLink);
+		child.getParents().add(newLink);
+		// cell.reinforce();
+		length += child.getLength();
+		return this;
+	}
+
+	public List<Link> getChildren() {
 		return this.children;
 	}
 
-	public ArrayList<Link> getParents() {
+	public int getLength() {
+		return length;
+	}
+
+	public List<Link> getParents() {
 		return this.parents;
 	}
 
+	public void load(Engine engine, TypeReader v) throws IOException {
+		v.readString(); // value
+		// convex
+		int count = v.readInt();
 
+		for (int i = 0; i < count; i++) {
+			Link l = new Link();
+			l.to = this;
+			l.indexInParent = i;
+//			((Savable) l).load(engine, v);
+			l.from = engine.getCells().get(v.readInt());
+			children.add(l);
+		}
+		v.clearReader();
+	}
+
+	public void save(Engine engine, TypeWriter v) throws IOException {
+		v.save(this.toString());
+
+		// convex
+		v.save(children.size());
+
+		for (Link l : children) {		
+//			((Savable) l).save(engine, v);
+			v.save(l.from.valueIndex);
+		}
+		v.clearWrite();
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (this.parents.size() != 0) {
+			sb.append('[');
+			for (Link l : this.children) {
+				sb.append(l.from.toString());
+			}
+			sb.append(']');
+		} else {
+			sb.append('{');
+			for (Link l : this.children) {
+				sb.append(l.from.toString());
+			}
+			sb.append('}');
+		}
+		return sb.toString();
+	}
 	// public final Cell getChild(int index) {
 	// if (this.children.size() > 0) {
 	// int i = index;

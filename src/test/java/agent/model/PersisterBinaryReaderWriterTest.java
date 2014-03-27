@@ -20,22 +20,6 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 		super.tearDown();
 	}
 
-	public final void testSaveStringEngine() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	public final void testLoad() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	public final void testDoSave() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	public final void testDoLoad() {
-		fail("Not yet implemented"); // TODO
-	}
-
 	public final void testReadString() throws IOException {
 		stringCheck("");
 		stringCheck("c");
@@ -142,14 +126,6 @@ public class PersisterBinaryReaderWriterTest extends TestCase {
 		byte b = w.readByte();
 		System.out.println(b);
 		assertEquals(expected, b);
-	}
-
-	public final void testClearWrite() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	public final void testClearReader() {
-		fail("Not yet implemented"); // TODO
 	}
 
 }

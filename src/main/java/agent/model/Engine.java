@@ -56,7 +56,6 @@ public class Engine implements Savable {
 		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
 			((Savable) cells.get(i)).save(engine, v);
 		}
-
 	}
 
 	public void load(Engine engine, TypeReader r) throws IOException {
@@ -68,7 +67,7 @@ public class Engine implements Savable {
 		r.clearReader();
 
 		for (int i = BASE_LENGTH; i < count; i++) {
-			cells.add(new CharCell(i));
+			cells.add(Cell.newWord(i));
 		}
 		for (int i = BASE_LENGTH; i < count; i++) {
 			((Savable) cells.get(i)).load(engine, r);
@@ -87,15 +86,15 @@ public class Engine implements Savable {
 		cells.clear();
 
 		for (int i = 0; i < BASE_LENGTH; i++) {
-			cells.add(new CharCell(i));
+			cells.add(Cell.newCharCell(i));
 		}
 	}
 
-//	public final Cell newCell() {
-//		Cell cell = new CharCell(cells.size());
-//		cells.add(cell);
-//		return cell;
-//	}
+	// public final Cell newCell() {
+	// Cell cell = new CharCell(cells.size());
+	// cells.add(cell);
+	// return cell;
+	// }
 
 	public final void trainNew(String sample) {
 		Context.trainNew(this, sample);

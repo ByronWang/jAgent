@@ -252,7 +252,7 @@ public class Form1 extends Form
 
 	private void engineView_SelectedChanged(Object sender, Agent.EngineView.CellEventArgs args)
 	{
-		Cell cell = args.value();
+		Cell cell = args.cell();
 		for (int i = 0; i < lstCells.Items.size(); i++)
 		{
 			if (lstCells.Items[i] == cell)
