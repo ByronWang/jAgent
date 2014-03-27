@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import agent.model.Cell;
+import agent.model.CharCell;
 import agent.model.Engine;
 import agent.model.SentenceCell;
 import agent.model.WordCell;
@@ -68,31 +69,31 @@ public class Context {
 		this.activeStack.add(index);
 	}
 
-//	private void checkDead(int index) {
-//		for (int j = 0; j < activeStack.size();) {
-//			int i = activeStack.get(j);
-//			WordInstance w = matchingBuffer[i];
-//
-//			while (w.signal != this.signal && w.nextCandidateIndex > index) {
-//				w = w.getNext();
-//			}
-//
-//			while (w.nextCandidateIndex == index && w.getNext() != null) {
-//				w = w.getNext();
-//			}
-//			if (w.nextCandidateIndex <= index) {
-//				w.die(this);
-//				if (w.getPrevious() != null) {
-//					w.getPrevious().setNext(w.getNext());
-//				} else {
-//					matchingBuffer[i] = w.getNext();
-//				}
-//				this.activeStack.remove(j);
-//			} else {
-//				j++;
-//			}
-//		}
-//	}
+	// private void checkDead(int index) {
+	// for (int j = 0; j < activeStack.size();) {
+	// int i = activeStack.get(j);
+	// WordInstance w = matchingBuffer[i];
+	//
+	// while (w.signal != this.signal && w.nextCandidateIndex > index) {
+	// w = w.getNext();
+	// }
+	//
+	// while (w.nextCandidateIndex == index && w.getNext() != null) {
+	// w = w.getNext();
+	// }
+	// if (w.nextCandidateIndex <= index) {
+	// w.die(this);
+	// if (w.getPrevious() != null) {
+	// w.getPrevious().setNext(w.getNext());
+	// } else {
+	// matchingBuffer[i] = w.getNext();
+	// }
+	// this.activeStack.remove(j);
+	// } else {
+	// j++;
+	// }
+	// }
+	// }
 
 	private Context(Engine engine) {
 		this.engine = engine;
@@ -130,12 +131,12 @@ public class Context {
 			buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
 		}
 
-//		if (buffer.get(0).cell().getLength() < buffer.size()) {
-//			fresh = true;
-//		} else {
-//			this.sentence = buffer.get(0).cell();
-//			fresh = false;
-//		}
+		// if (buffer.get(0).cell().getLength() < buffer.size()) {
+		// fresh = true;
+		// } else {
+		// this.sentence = buffer.get(0).cell();
+		// fresh = false;
+		// }
 		return this;
 	}
 
@@ -156,13 +157,28 @@ public class Context {
 
 	private Cell addNewSentence() {
 		SentenceCell sentence = Cell.newSentence();
+
+		sentence = Cell.newSentence();
+
+		boolean stillRow = true;
+		for (int j = 0; j < buffer.size(); j++) {
+			if (!(buffer.get(j).cell instanceof CharCell)) {
+				stillRow = false;
+				break;
+			}
+		}
+
+		if (stillRow && buffer.size()>1) {
+			Cell cell = createWord(buffer, 0, buffer.size());
+			buffer.set(0, buffer.get(0).sibling(cell.getChildren().get(0)));
+		}
+
 		for (int j = 0; j < buffer.size();) {
 			Cell sc = buffer.get(j).cell();
 			sentence.comeFrom(sc);
 			j += sc.getLength();
 		}
 		this.engine.addSentence(sentence);
-
 		return sentence;
 	}
 
