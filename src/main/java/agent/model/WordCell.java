@@ -29,7 +29,6 @@ public class WordCell extends Cell {
 		newLink.from = child;
 		newLink.to = this;
 		newLink.indexInParent = this.children.size();
-		newLink.weight = 1;
 
 		this.children.add(newLink);
 		child.getParents().add(newLink);
@@ -121,5 +120,27 @@ public class WordCell extends Cell {
 	@Override
 	public void usedBy(Cell cell) {
 		this.weight++;
+		
+		if(this.weight % 100 == 0){
+			for (Link l : this.children) {
+				List<Link> parents = l.from.getParents();
+				for (int i = 0; i < parents.size(); i++) {
+					if(parents.get(i).to == this){
+						if(i>0 && parents.get(i-1).to.getWeight() < weight){
+							Link me = parents.get(i);
+							Link him = parents.get(i-1);
+							parents.set(i-1, me);
+							parents.set(i, him);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public int getWeight() {
+		return this.weight;
 	}
 }

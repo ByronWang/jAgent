@@ -54,8 +54,6 @@ public abstract class ActivatedCell
 		}
 
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
 
 	public final Cell cell()
 	{

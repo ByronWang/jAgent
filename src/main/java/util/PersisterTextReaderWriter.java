@@ -131,6 +131,7 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 
 	public void save(String v) throws IOException {
 		w.write(encode(v));
+		w.write("\t\t\t\t\t");
 //		w.write('\n');
 	}
 

@@ -49,6 +49,9 @@ public abstract class Cell implements Savable {
 	}
 
 	abstract public List<Link> getParents();
+	public int getWeight(){
+		return 0;
+	}
 
 	abstract public void usedBy(Cell cell);
 }
