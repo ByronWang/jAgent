@@ -15,6 +15,7 @@ public abstract class Cell implements Savable {
 		SentenceCell sentence = new SentenceCell();
 		return sentence;
 	}
+
 	public static SentenceCell newSentence(int valueIndex) {
 		SentenceCell sentence = new SentenceCell(valueIndex);
 		return sentence;
@@ -43,8 +44,11 @@ public abstract class Cell implements Savable {
 
 	abstract public List<Link> getChildren();
 
-	 public int getLength() {
+	public int getLength() {
 		return length;
 	}
-	 abstract public List<Link> getParents();
+
+	abstract public List<Link> getParents();
+
+	abstract public void usedBy(Cell cell);
 }

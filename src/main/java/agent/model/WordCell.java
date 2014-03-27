@@ -11,6 +11,7 @@ public class WordCell extends Cell {
 
 	protected List<Link> children = new ArrayList<>();
 	private int length = 0;
+	private int weight = 0;
 
 	protected List<Link> parents = new ArrayList<>();
 
@@ -55,6 +56,7 @@ public class WordCell extends Cell {
 
 	public void load(Engine engine, TypeReader v) throws IOException {
 		v.readString(); // value
+		weight = v.readInt();
 		// convex
 		int count = v.readInt();
 
@@ -78,7 +80,7 @@ public class WordCell extends Cell {
 
 	public void save(Engine engine, TypeWriter v) throws IOException {
 		v.save(this.toString());
-
+		v.save(weight);
 		// convex
 		v.save(children.size());
 
@@ -115,4 +117,9 @@ public class WordCell extends Cell {
 	// }
 	// return null;
 	// }
+
+	@Override
+	public void usedBy(Cell cell) {
+		this.weight++;
+	}
 }

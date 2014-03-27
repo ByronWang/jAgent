@@ -36,4 +36,8 @@ public class CharCell extends Cell {
 	public String toString() {
 		return String.valueOf((char) valueIndex);
 	}
+
+	@Override
+	public void usedBy(Cell cell) {		
+	}
 }

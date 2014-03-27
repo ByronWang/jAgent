@@ -65,6 +65,7 @@ public class Context {
 		for (int j = 0; j < buffer.size();) {
 			Cell sc = buffer.get(j).cell();
 			sentence.comeFrom(sc);
+			sc.usedBy(sentence);
 			j += sc.getLength();
 		}
 		this.engine.addSentence(sentence);
