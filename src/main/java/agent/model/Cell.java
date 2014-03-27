@@ -41,10 +41,10 @@ public abstract class Cell implements Savable {
 		this.valueIndex = valueIndex;
 	}
 
-	public int getLength() {
+	abstract public List<Link> getChildren();
+
+	 public int getLength() {
 		return length;
 	}
-
 	 abstract public List<Link> getParents();
-	 abstract public List<Link> getChildren();
 }

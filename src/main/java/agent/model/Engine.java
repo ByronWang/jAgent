@@ -9,9 +9,8 @@ import agent.runtime.Context;
 
 public class Engine implements Savable {
 	public static final int BASE_LENGTH = 0x10000;
-	public static final int WORD_LENGTH = BASE_LENGTH + BASE_LENGTH;
 	public static final int BEGINE_OF_WORD = BASE_LENGTH;
-	public static final int BEGINE_OF_SENTENCE = WORD_LENGTH;
+	public static final int WORD_LENGTH = BASE_LENGTH + BASE_LENGTH;
 	
 	// AnalyzerListenHandler analyzerListenHandler = new AnalyzerListenHandler()
 	// {
@@ -34,6 +33,39 @@ public class Engine implements Savable {
 	private java.util.ArrayList<Cell> cells = new java.util.ArrayList<Cell>(BASE_LENGTH + BASE_LENGTH);
 	private java.util.ArrayList<Cell> sentences = new java.util.ArrayList<Cell>(BASE_LENGTH);
 
+	public final Cell addNewWord(Cell cell){
+		cell.valueIndex =cells.size();
+		this.cells.add(cell);
+		return cell;
+	}
+
+	public final Cell addSentence(Cell cell){
+		cell.valueIndex =sentences.size();
+		this.sentences.add(cell);
+		return cell;
+	}
+
+	public final void clear() {
+		// clear list
+		cells.clear();
+
+		for (int i = 0; i < BASE_LENGTH; i++) {
+			cells.add(Cell.newCharCell(i));
+		}
+	}
+
+	public final Cell find(String sample) {
+		//
+		// Analyzer a = Analyzer.Instance(this).run(sample);
+		// if (!a.isFresh()) {
+		// return a.getCell();
+		// }
+		return null;
+	}
+
+	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+	// /#region Savable Members
+
 	public final java.util.ArrayList<Cell> getCells() {
 		return cells;
 	}
@@ -42,33 +74,15 @@ public class Engine implements Savable {
 		return cells.get(index);
 	}
 
-	public final void setItem(int index, Cell value) {
-		cells.set(index, value);
-	}
-
 	public final int getLength() {
 		return this.cells.size();
 	}
 
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Savable Members
-
-	public void save(Engine engine, TypeWriter v) throws IOException {
-		// all cell count
-		v.save(cells.size() - BASE_LENGTH);
-		v.clearWrite();
-
-		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
-			((Savable) cells.get(i)).save(engine, v);
-		}
-		
-		v.save(sentences.size());
-		v.clearWrite();
-
-		for (int i = 0; i < this.sentences.size(); i++) {
-			((Savable) sentences.get(i)).save(engine, v);
-		}
-	}
+	// public final Cell newCell() {
+	// Cell cell = new CharCell(cells.size());
+	// cells.add(cell);
+	// return cell;
+	// }
 
 	public void load(Engine engine, TypeReader r) throws IOException {
 
@@ -105,32 +119,21 @@ public class Engine implements Savable {
 		}
 	}
 
-	public final void clear() {
-		// clear list
-		cells.clear();
+	public void save(Engine engine, TypeWriter v) throws IOException {
+		// all cell count
+		v.save(cells.size() - BASE_LENGTH);
+		v.clearWrite();
 
-		for (int i = 0; i < BASE_LENGTH; i++) {
-			cells.add(Cell.newCharCell(i));
+		for (int i = BASE_LENGTH; i < this.cells.size(); i++) {
+			((Savable) cells.get(i)).save(engine, v);
 		}
-	}
+		
+		v.save(sentences.size());
+		v.clearWrite();
 
-	// public final Cell newCell() {
-	// Cell cell = new CharCell(cells.size());
-	// cells.add(cell);
-	// return cell;
-	// }
-
-	public final void trainNew(String sample) {
-		Context.trainNew(this, sample);
-	}
-
-	public final Cell find(String sample) {
-		//
-		// Analyzer a = Analyzer.Instance(this).run(sample);
-		// if (!a.isFresh()) {
-		// return a.getCell();
-		// }
-		return null;
+		for (int i = 0; i < this.sentences.size(); i++) {
+			((Savable) sentences.get(i)).save(engine, v);
+		}
 	}
 
 	// List<CellInstance> march(List<CellInstance> activeList)
@@ -202,16 +205,12 @@ public class Engine implements Savable {
 	// return newls;
 	// }
 	
-	public final Cell addNewWord(Cell cell){
-		cell.valueIndex =cells.size();
-		this.cells.add(cell);
-		return cell;
+	public final void setItem(int index, Cell value) {
+		cells.set(index, value);
 	}
 	
-	public final Cell addSentence(Cell cell){
-		cell.valueIndex =sentences.size();
-		this.sentences.add(cell);
-		return cell;
+	public final void trainNew(String sample) {
+		Context.trainNew(this, sample);
 	}
 
 }

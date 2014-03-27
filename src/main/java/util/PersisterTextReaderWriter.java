@@ -15,34 +15,47 @@ import agent.model.Engine;
 public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 	public static char SEPERATOR = ';';
 
-	public static void save(String filename, Engine engine) {
-		new PersisterTextReaderWriter().doSave(filename, engine);
-	}
-
 	public static void load(String filename, Engine engine) {
 		new PersisterTextReaderWriter().doLoad(filename, engine);
 	}
 
+	public static void save(String filename, Engine engine) {
+		new PersisterTextReaderWriter().doSave(filename, engine);
+	}
+
+	public int index = 0;
+
+	public java.io.BufferedReader r = null;
+
+	public String[] vs = null;
 	public java.io.BufferedWriter w = null;
-
-	public void doSave(String filename, Engine engine) {
-		try {
-			this.w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
-
-			((Savable) engine).save(engine, this);
-
-			this.w.close();
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+	public void clearReader() throws IOException {
+		String s = r.readLine();
+		index = 0;
+		if (s == null) {
+			vs = null;
+		} else {
+			vs = s.split(java.util.regex.Pattern.quote((new Character(SEPERATOR)).toString()), -1);
 		}
+		// System.Console.WriteLine(s);
 
 	}
 
-	public java.io.BufferedReader r = null;
-	public String[] vs = null;
-	public int index = 0;
+	public void clearWrite() throws IOException {
+		w.write("\n");
+	}
+
+	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+	// /#region Visit Members
+
+	public String decode(String s) {
+		s = s.replace("\\n", "\n");
+		s = s.replace("\\c", ";");
+		s = s.replace("\\t", "\t");
+		s = s.replace("\\r", "\r");
+		s = s.replace("\\\\", "\\");
+		return s;
+	}
 
 	public void doLoad(String filename, Engine engine) {
 		try {
@@ -60,61 +73,20 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 		}
 	}
 
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Visit Members
+	public void doSave(String filename, Engine engine) {
+		try {
+			this.w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "utf-8"));
 
-	public void save(String v) throws IOException {
-		w.write(encode(v));
-//		w.write('\n');
-	}
+			((Savable) engine).save(engine, this);
 
-	public void save(int v) throws IOException {
-//		w.write(v);
-//		w.write(";");
-	}
-
-	public void save(short v) throws IOException {
-//		w.write(v);
-//		w.write(";");
-	}
-
-	public void save(byte v) throws IOException {
-//		w.write(v);
-//		w.write(";");
-	}
-
-	public void clearWrite() throws IOException {
-		w.write("\n");
-	}
-
-	public String readString() {
-		return decode(vs[index++]);
-	}
-
-	public int readInt() {
-		return Integer.parseInt(vs[index++]);
-	}
-
-	public byte readByte() {
-		return Byte.parseByte(vs[index++]);
-	}
-
-	public short readShort() {
-		return (short) Integer.parseInt(vs[index++]);
-	}
-
-	public void clearReader() throws IOException {
-		String s = r.readLine();
-		index = 0;
-		if (s == null) {
-			vs = null;
-		} else {
-			vs = s.split(java.util.regex.Pattern.quote((new Character(SEPERATOR)).toString()), -1);
+			this.w.close();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		// System.Console.WriteLine(s);
 
 	}
-
 
 	public String encode(String s) {
 		s = s.replace("\\", "\\\\");
@@ -125,13 +97,41 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 		return s;
 	}
 
-	public String decode(String s) {
-		s = s.replace("\\n", "\n");
-		s = s.replace("\\c", ";");
-		s = s.replace("\\t", "\t");
-		s = s.replace("\\r", "\r");
-		s = s.replace("\\\\", "\\");
-		return s;
+	public byte readByte() {
+		return Byte.parseByte(vs[index++]);
+	}
+
+	public int readInt() {
+		return Integer.parseInt(vs[index++]);
+	}
+
+	public short readShort() {
+		return (short) Integer.parseInt(vs[index++]);
+	}
+
+	public String readString() {
+		return decode(vs[index++]);
+	}
+
+	public void save(byte v) throws IOException {
+//		w.write(v);
+//		w.write(";");
+	}
+
+	public void save(int v) throws IOException {
+//		w.write(v);
+//		w.write(";");
+	}
+
+
+	public void save(short v) throws IOException {
+//		w.write(v);
+//		w.write(";");
+	}
+
+	public void save(String v) throws IOException {
+		w.write(encode(v));
+//		w.write('\n');
 	}
 
 }

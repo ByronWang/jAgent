@@ -10,9 +10,9 @@ import util.TypeWriter;
 public class WordCell extends Cell {
 
 	protected List<Link> children = new ArrayList<>();
-	protected List<Link> parents = new ArrayList<>();
-
 	private int length = 0;
+
+	protected List<Link> parents = new ArrayList<>();
 
 	public int valueIndex = 0;
 

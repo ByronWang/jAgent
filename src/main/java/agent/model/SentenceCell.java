@@ -8,23 +8,28 @@ import util.TypeReader;
 import util.TypeWriter;
 
 public class SentenceCell extends Cell {
-	public SentenceCell(int index) {
-		super(index);
-	}
-
-	public SentenceCell() {
-	}
-
 	protected List<Cell> children = new ArrayList<>();
 
 	int length = 0;
 
 	public int valueIndex = 0;
 
+	public SentenceCell() {
+	}
+
+	public SentenceCell(int index) {
+		super(index);
+	}
+
 	public Cell comeFrom(Cell child) {
 		this.children.add(child);
 		length += child.getLength();
 		return this;
+	}
+
+	@Override
+	public List<Link> getChildren() {
+		throw new RuntimeException();
 	}
 
 	public int getLength() {
@@ -65,10 +70,5 @@ public class SentenceCell extends Cell {
 		}
 		sb.append('}');
 		return sb.toString();
-	}
-
-	@Override
-	public List<Link> getChildren() {
-		throw new RuntimeException();
 	}
 }

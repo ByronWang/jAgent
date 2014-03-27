@@ -7,9 +7,9 @@ import agent.model.Link;
 
 public abstract class ActivatedCell
 {
+	protected Cell cell = null;
 	public int indexInBuffer;
 	public long signal;
-	protected Cell cell = null;
 	
 	public ActivatedCell(Cell cell, long signal, int indexInBuffer)
 	{
@@ -57,15 +57,15 @@ public abstract class ActivatedCell
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#endregion
 
-	public abstract ActivatedWord sibling(Link l);
+	public final Cell cell()
+	{
+		return cell;
+	}
 
+	public abstract ActivatedWord sibling(Link l);
 	@Override
 	public String toString()
 	{
 		return this.cell().toString().toString() + " : ";
-	}
-	public final Cell cell()
-	{
-		return cell;
 	}
 }

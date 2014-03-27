@@ -7,16 +7,36 @@ import agent.model.Link;
 
 public class ActivatedWord extends ActivatedCell
 {
+	private int indexInParent;
 	public int indexOfNextInBuffer;
 	private int indexOfNextInParent;
-	private int indexInParent;
 
 	private ActivatedWord next = null;
 	private ActivatedWord previous = null;
+	public ActivatedWord(Cell cell, long signal, int indexInBuffer, int indexInParent, int indexOfNextCellInBuffer)
+	{
+		super(cell, signal, indexInBuffer);
+		this.indexInParent = indexInParent;
+		this.indexOfNextInParent = indexInParent + 1;
+		this.indexOfNextInBuffer = indexOfNextCellInBuffer;
+	}
+	public final void die(Context context)
+	{
+		if (indexOfNextInParent - indexInParent > 1)
+		{
+			context.reasign(this.cell, indexInParent, indexOfNextInParent);
+		}
+	}
 	public final ActivatedWord getNext()
 	{
 		return next;
 	}
+
+	public final ActivatedWord getPrevious()
+	{
+		return previous;
+	}
+
 	public final void setNext(ActivatedWord value)
 	{
 		next = value;
@@ -25,19 +45,18 @@ public class ActivatedWord extends ActivatedCell
 			value.previous = this;
 		}
 	}
-	public final ActivatedWord getPrevious()
+
+	@Override
+	public ActivatedWord sibling(Link l)
 	{
-		return previous;
+		return new ActivatedWord(l.to, signal, indexInBuffer, l.indexInParent, indexOfNextInBuffer);
 	}
 
-	public ActivatedWord(Cell cell, long signal, int indexInBuffer, int indexInParent, int indexOfNextCellInBuffer)
+	@Override
+	public String toString()
 	{
-		super(cell, signal, indexInBuffer);
-		this.indexInParent = indexInParent;
-		this.indexOfNextInParent = indexInParent + 1;
-		this.indexOfNextInBuffer = indexOfNextCellInBuffer;
+		return this.cell().toString().toString() + " : " + this.indexOfNextInParent;
 	}
-
 	public final void tryMatch(Context context, List<ActivatedCell> buffer, Link l, int indexInBuffer)
 	{
 		if (this.indexOfNextInBuffer == indexInBuffer && l.indexInParent == this.indexOfNextInParent)
@@ -57,24 +76,5 @@ public class ActivatedWord extends ActivatedCell
 		{
 			this.getNext().tryMatch(context, buffer, l, indexInBuffer);
 		}
-	}
-
-	public final void die(Context context)
-	{
-		if (indexOfNextInParent - indexInParent > 1)
-		{
-			context.reasign(this.cell, indexInParent, indexOfNextInParent);
-		}
-	}
-
-	@Override
-	public String toString()
-	{
-		return this.cell().toString().toString() + " : " + this.indexOfNextInParent;
-	}
-	@Override
-	public ActivatedWord sibling(Link l)
-	{
-		return new ActivatedWord(l.to, signal, indexInBuffer, l.indexInParent, indexOfNextInBuffer);
 	}
 }

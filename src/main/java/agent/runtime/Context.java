@@ -10,63 +10,65 @@ import agent.model.SentenceCell;
 import agent.model.WordCell;
 
 public class Context {
-	public static void trainNew(Engine engine, String sample) {
-		Context a = Context.Instance(engine);
-		// a.getcontextListen().add(contextListenHandler);
-		a.runAndAdd(sample);
-	}
+	static final int BASE_LENGTH = 0x10000;
 
 	static Context instance = null;
+
+	private static ActivatedWord[] matchingBuffer = new ActivatedWord[BASE_LENGTH];
+
+	static final int MAX_LENGTH = 0x20000;
+	private static long SIGNAL_SEED = System.currentTimeMillis();
+
+	// private contextListenHandlerImp contextListen = new
+	// contextListenHandlerImp();
 
 	public static Context Instance(Engine engine) {
 		if (instance != null) return instance;
 		instance = new Context(engine);
 		return instance;
 	}
-
-	static final int BASE_LENGTH = 0x10000;
-	static final int MAX_LENGTH = 0x20000;
-
-	// private contextListenHandlerImp contextListen = new
-	// contextListenHandlerImp();
-
-	private Engine engine;
-	private static long SIGNAL_SEED = System.currentTimeMillis();
-
-	private long signal = 0;
-	private boolean fresh = false;
-	private static ActivatedWord[] matchingBuffer = new ActivatedWord[BASE_LENGTH];
-	private List<ActivatedCell> buffer = new ArrayList<ActivatedCell>();
-
-	private java.util.ArrayList<Integer> activeStack = new java.util.ArrayList<Integer>();
-
-	final ActivatedWord getItem(int index) {
-		index -= BASE_LENGTH;
-		if (matchingBuffer[index] == null) // hasn't matched word
-		{
-		} else if (matchingBuffer[index].signal != signal) // has old matched
-															// word
-		{
-		} else {
-			return matchingBuffer[index];
-		}
-
-		return null;
+	public static void trainNew(Engine engine, String sample) {
+		Context a = Context.Instance(engine);
+		// a.getcontextListen().add(contextListenHandler);
+		a.runAndAdd(sample);
 	}
 
-	final void setItem(int index, ActivatedWord value) {
-		index -= BASE_LENGTH;
-		ActivatedWord tci = matchingBuffer[index];
+	private java.util.ArrayList<Integer> activeStack = new java.util.ArrayList<Integer>();
+	private List<ActivatedCell> buffer = new ArrayList<ActivatedCell>();
+	private Engine engine;
+	private boolean fresh = false;
 
-		if (tci == null || tci.signal != signal) {
-			matchingBuffer[index] = value;
-		} else {
-			while (tci.getNext() != null) {
-				tci = tci.getNext();
+	private long signal = 0;
+
+	private Context(Engine engine) {
+		this.engine = engine;
+	}
+
+	private Cell addNewSentence() {
+		SentenceCell sentence = Cell.newSentence();
+
+		sentence = Cell.newSentence();
+
+		boolean stillRow = true;
+		for (int j = 0; j < buffer.size(); j++) {
+			if (!(buffer.get(j).cell instanceof CharCell)) {
+				stillRow = false;
+				break;
 			}
-			tci.setNext(value);
 		}
-		this.activeStack.add(index);
+
+		if (stillRow && buffer.size()>1) {
+			Cell cell = createWord(buffer, 0, buffer.size());
+			buffer.set(0, buffer.get(0).sibling(cell.getChildren().get(0)));
+		}
+
+		for (int j = 0; j < buffer.size();) {
+			Cell sc = buffer.get(j).cell();
+			sentence.comeFrom(sc);
+			j += sc.getLength();
+		}
+		this.engine.addSentence(sentence);
+		return sentence;
 	}
 
 	// private void checkDead(int index) {
@@ -95,8 +97,62 @@ public class Context {
 	// }
 	// }
 
-	private Context(Engine engine) {
-		this.engine = engine;
+	private Cell createWord(List<ActivatedCell> buffer, int indexFrom, int indexTo) {
+		if (indexTo - indexFrom == 1) {
+			return buffer.get(indexFrom).cell();
+		} else {
+			WordCell newWord = Cell.newWord();
+			for (int j = indexFrom; j < indexTo;) {
+				Cell sc = buffer.get(j).cell();
+				newWord.comeFrom(sc);
+				j += sc.getLength();
+			}
+			this.engine.addNewWord(newWord);
+			return newWord;
+		}
+	}
+
+	final ActivatedWord getItem(int index) {
+		index -= BASE_LENGTH;
+		if (matchingBuffer[index] == null) // hasn't matched word
+		{
+		} else if (matchingBuffer[index].signal != signal) // has old matched
+															// word
+		{
+		} else {
+			return matchingBuffer[index];
+		}
+
+		return null;
+	}
+
+	final int getLength() {
+		return matchingBuffer.length;
+	}
+
+	final boolean isFresh() {
+		return fresh;
+	}
+
+	final void reasign(Cell oldCell, int convexStartIndex, int nextConvexIndex) {
+		// Cell newCell = this.engine.newCell();
+		// for (int i = 0; i < nextConvexIndex - convexStartIndex; i++)
+		// {
+		// Link link = oldCell.Convex[convexStartIndex];
+		// link.To = newCell;
+		// link.ConvexIndex = i;
+		// newCell.Convex.Add(link);
+		// oldCell.Convex.RemoveAt(convexStartIndex);
+		// }
+
+		// Link newLink = new Link();
+		// oldCell.Convex.Insert(convexStartIndex, newLink);
+		// newLink.From = newCell;
+		// newLink.To = oldCell;
+		// newLink.ConvexIndex = convexStartIndex;
+		// newLink.Strength = 1;
+		// newCell.Concave.Add(newLink);
+		// oldCell.addTos(newLink);
 	}
 
 	final Context run(String sample) {
@@ -140,81 +196,25 @@ public class Context {
 		return this;
 	}
 
-	private Cell createWord(List<ActivatedCell> buffer, int indexFrom, int indexTo) {
-		if (indexTo - indexFrom == 1) {
-			return buffer.get(indexFrom).cell();
-		} else {
-			WordCell newWord = Cell.newWord();
-			for (int j = indexFrom; j < indexTo;) {
-				Cell sc = buffer.get(j).cell();
-				newWord.comeFrom(sc);
-				j += sc.getLength();
-			}
-			this.engine.addNewWord(newWord);
-			return newWord;
-		}
-	}
-
-	private Cell addNewSentence() {
-		SentenceCell sentence = Cell.newSentence();
-
-		sentence = Cell.newSentence();
-
-		boolean stillRow = true;
-		for (int j = 0; j < buffer.size(); j++) {
-			if (!(buffer.get(j).cell instanceof CharCell)) {
-				stillRow = false;
-				break;
-			}
-		}
-
-		if (stillRow && buffer.size()>1) {
-			Cell cell = createWord(buffer, 0, buffer.size());
-			buffer.set(0, buffer.get(0).sibling(cell.getChildren().get(0)));
-		}
-
-		for (int j = 0; j < buffer.size();) {
-			Cell sc = buffer.get(j).cell();
-			sentence.comeFrom(sc);
-			j += sc.getLength();
-		}
-		this.engine.addSentence(sentence);
-		return sentence;
-	}
-
-	final void reasign(Cell oldCell, int convexStartIndex, int nextConvexIndex) {
-		// Cell newCell = this.engine.newCell();
-		// for (int i = 0; i < nextConvexIndex - convexStartIndex; i++)
-		// {
-		// Link link = oldCell.Convex[convexStartIndex];
-		// link.To = newCell;
-		// link.ConvexIndex = i;
-		// newCell.Convex.Add(link);
-		// oldCell.Convex.RemoveAt(convexStartIndex);
-		// }
-
-		// Link newLink = new Link();
-		// oldCell.Convex.Insert(convexStartIndex, newLink);
-		// newLink.From = newCell;
-		// newLink.To = oldCell;
-		// newLink.ConvexIndex = convexStartIndex;
-		// newLink.Strength = 1;
-		// newCell.Concave.Add(newLink);
-		// oldCell.addTos(newLink);
-	}
-
 	final Context runAndAdd(String sample) {
 		this.run(sample);
 		this.addNewSentence();
 		return this;
 	}
 
-	final int getLength() {
-		return matchingBuffer.length;
-	}
+	final void setItem(int index, ActivatedWord value) {
+		index -= BASE_LENGTH;
+		ActivatedWord tci = matchingBuffer[index];
 
-	final boolean isFresh() {
-		return fresh;
+		if (tci == null || tci.signal != signal) {
+			matchingBuffer[index] = value;
+		} else {
+			while (tci.getNext() != null) {
+				tci = tci.getNext();
+			}
+			tci.setNext(value);
+		}
+		this.activeStack.add(index);
 	}
 
 	// final contextListenHandlerImp getcontextListen() {

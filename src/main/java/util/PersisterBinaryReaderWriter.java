@@ -11,15 +11,101 @@ import agent.model.Engine;
 
 public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 
-	public static void save(String filename, Engine engine) {
-		new PersisterBinaryReaderWriter().doSave(filename, engine);
+	private static byte char0(char x) {
+		return (byte) (x);
+	}
+
+	private static byte char1(char x) {
+		return (byte) (x >> 8);
+	}
+
+	private static byte int0(int x) {
+		return (byte) (x & 0x7F);
+	}
+
+	private static byte int1(int x) {
+		return (byte) (x >> 7 & 0x7F);
+	}
+
+	private static byte int2(int x) {
+		return (byte) (x >> 14 & 0x7F);
+	}
+
+	private static byte int3(int x) {
+		return (byte) (x >> 21 & 0x7F);
+	}
+
+	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+	// /#region Visit Members
+
+	private static byte int4(int x) {
+		return (byte) (x >> 28 & 0x7F);
 	}
 
 	public static void load(String filename, Engine engine) {
 		new PersisterBinaryReaderWriter().doLoad(filename, engine);
 	}
 
+	// @formatter : off
+	static private char makeChar(byte b1, byte b0) {
+		return (char) ((b1 << 8) | (b0 & 0xff));
+	}
+
+	// static private int makeInt(byte b3, byte b2, byte b1, byte b0) {
+	// return (((b3) << 21) | ((b2 & 0xff) << 14) | ((b1 & 0xff) << 7) | ((b0 &
+	// 0xff)));
+	// }
+
+	static private short makeShort(byte b1, byte b0) {
+		return (short) ((b1 << 8) | (b0 & 0xff));
+	}
+
+	public static void save(String filename, Engine engine) {
+		new PersisterBinaryReaderWriter().doSave(filename, engine);
+	}
+
+	private static byte short0(short x) {
+		return (byte) (x);
+	}
+
+	private static byte short1(short x) {
+		return (byte) (x >> 8);
+	}
+
+	// private static byte int3(int x) { return (byte)(x >> 24); }
+	// private static byte int2(int x) { return (byte)(x >> 16); }
+	// private static byte int1(int x) { return (byte)(x >> 8); }
+	// private static byte int0(int x) { return (byte)(x ); }
+
+	byte[] buffer = new byte[1024];
+
+	public InputStream r = null;
+
 	public java.io.OutputStream w = null;
+
+	@Override
+	public void clearReader() throws IOException {
+
+	}
+
+	public void clearWrite() {
+	}
+
+	public void doLoad(String filename, Engine engine) {
+		try {
+			this.r = new FileInputStream(filename);
+			((TypeReader) this).clearReader();
+			((Savable) engine).load(engine, this);
+
+			this.r.close();
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public void doSave(String filename, Engine engine) {
 		try {
@@ -38,92 +124,37 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 
 	}
 
-	public InputStream r = null;
+	public byte readByte() throws IOException {
+		return (byte) r.read();
+	}
 
-	public void doLoad(String filename, Engine engine) {
-		try {
-			this.r = new FileInputStream(filename);
-			((TypeReader) this).clearReader();
-			((Savable) engine).load(engine, this);
-
-			this.r.close();
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+	public int readInt() throws IOException {
+		int b0 = r.read();
+		if (b0 < 0X80) {
+			return b0;
 		}
+		int b1 = (int) r.read();
+		if (b1 < 0X80) {
+			return (b1 << 7) | (b0 & 0x7F);
+		}
+
+		int b2 = (int) r.read();
+		if (b2 < 0X80) {
+			return (((b2) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+		}
+
+		int b3 = (int) r.read();
+		if (b3 < 0X80) {
+			return (((b3) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+		}
+
+		int b4 = (int) r.read();
+		return (((b4) << 28) | ((b3 & 0x7F) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+
 	}
 
-	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-	// /#region Visit Members
-
-	byte[] buffer = new byte[1024];
-
-	// @formatter : off
-	static private char makeChar(byte b1, byte b0) {
-		return (char) ((b1 << 8) | (b0 & 0xff));
-	}
-
-	static private short makeShort(byte b1, byte b0) {
-		return (short) ((b1 << 8) | (b0 & 0xff));
-	}
-
-	// static private int makeInt(byte b3, byte b2, byte b1, byte b0) {
-	// return (((b3) << 21) | ((b2 & 0xff) << 14) | ((b1 & 0xff) << 7) | ((b0 &
-	// 0xff)));
-	// }
-
-	private static byte char1(char x) {
-		return (byte) (x >> 8);
-	}
-
-	private static byte char0(char x) {
-		return (byte) (x);
-	}
-
-	private static byte short1(short x) {
-		return (byte) (x >> 8);
-	}
-
-	private static byte short0(short x) {
-		return (byte) (x);
-	}
-
-	// private static byte int3(int x) { return (byte)(x >> 24); }
-	// private static byte int2(int x) { return (byte)(x >> 16); }
-	// private static byte int1(int x) { return (byte)(x >> 8); }
-	// private static byte int0(int x) { return (byte)(x ); }
-
-	private static byte int4(int x) {
-		return (byte) (x >> 28 & 0x7F);
-	}
-
-	private static byte int3(int x) {
-		return (byte) (x >> 21 & 0x7F);
-	}
-
-	private static byte int2(int x) {
-		return (byte) (x >> 14 & 0x7F);
-	}
-
-	private static byte int1(int x) {
-		return (byte) (x >> 7 & 0x7F);
-	}
-
-	private static byte int0(int x) {
-		return (byte) (x & 0x7F);
-	}
-
-	public void save(String x) throws IOException {
-		// char[] ca = x.toCharArray();
-		// save(ca.length);
-		// for (int i = 0; i < ca.length; i++) {
-		// char c = ca[i];
-		// w.write(char1(c));
-		// w.write(char0(c));
-		// }
+	public short readShort() throws IOException {
+		return makeShort((byte) r.read(), (byte) r.read());
 	}
 
 	public String readString() throws IOException {
@@ -142,6 +173,10 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 		//
 		// return sb.toString();
 		return null;
+	}
+
+	public void save(byte x) throws IOException {
+		w.write(x);
 	}
 
 	public void save(int x) throws IOException {
@@ -174,54 +209,19 @@ public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
 		}
 	}
 
-	public int readInt() throws IOException {
-		int b0 = r.read();
-		if (b0 < 0X80) {
-			return b0;
-		}
-		int b1 = (int) r.read();
-		if (b1 < 0X80) {
-			return (b1 << 7) | (b0 & 0x7F);
-		}
-
-		int b2 = (int) r.read();
-		if (b2 < 0X80) {
-			return (((b2) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
-		}
-
-		int b3 = (int) r.read();
-		if (b3 < 0X80) {
-			return (((b3) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
-		}
-
-		int b4 = (int) r.read();
-		return (((b4) << 28) | ((b3 & 0x7F) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
-
-	}
-
 	public void save(short x) throws IOException {
 		w.write(short1(x));
 		w.write(short0(x));
 	}
 
-	public short readShort() throws IOException {
-		return makeShort((byte) r.read(), (byte) r.read());
-	}
-
-	public void save(byte x) throws IOException {
-		w.write(x);
-	}
-
-	public byte readByte() throws IOException {
-		return (byte) r.read();
-	}
-
-	public void clearWrite() {
-	}
-
-	@Override
-	public void clearReader() throws IOException {
-
+	public void save(String x) throws IOException {
+		// char[] ca = x.toCharArray();
+		// save(ca.length);
+		// for (int i = 0; i < ca.length; i++) {
+		// char c = ca[i];
+		// w.write(char1(c));
+		// w.write(char0(c));
+		// }
 	}
 
 }

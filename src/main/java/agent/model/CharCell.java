@@ -17,14 +17,8 @@ public class CharCell extends Cell {
 	}
 
 	@Override
-	public String toString() {
-		return String.valueOf((char) valueIndex);
-	}
-
-	public void save(Engine engine, TypeWriter v) throws IOException {
-	}
-
-	public void load(Engine engine, TypeReader v) throws IOException {
+	public List<Link> getChildren() {
+		throw new RuntimeException();
 	}
 
 	@Override
@@ -32,8 +26,14 @@ public class CharCell extends Cell {
 		return this.parents;
 	}
 
+	public void load(Engine engine, TypeReader v) throws IOException {
+	}
+
+	public void save(Engine engine, TypeWriter v) throws IOException {
+	}
+
 	@Override
-	public List<Link> getChildren() {
-		throw new RuntimeException();
+	public String toString() {
+		return String.valueOf((char) valueIndex);
 	}
 }
