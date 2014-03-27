@@ -156,7 +156,7 @@ public class Context {
 		// oldCell.addTos(newLink);
 	}
 
-	final Context run(String sample) {
+	final Context analyze(String sample) {
 		signal = SIGNAL_SEED++;
 		// if (sample.StartsWith("�K�v���K�v"))
 		// {
@@ -167,15 +167,28 @@ public class Context {
 		activeStack.clear();
 
 		int startIndex = 0;
+		
+		int charType;
+		int lastCharType=-1;
 		for (int i = 0; i < sample.length(); i++) {
 			char c = sample.charAt(i);
+			charType =  Character.getType(c);
+
 			if (!Character.isLetter(c)) {
 				if (i - startIndex > 1 && buffer.get(startIndex).cell().getLength() < i - startIndex) {
 					Cell cell = createWord(buffer, startIndex, i);
 					buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
 				}
 				startIndex = i + 1;
+			}else if(charType!=lastCharType){
+				if (i - startIndex > 1 && buffer.get(startIndex).cell().getLength() < i - startIndex) {
+					Cell cell = createWord(buffer, startIndex, i);
+					buffer.set(startIndex, buffer.get(startIndex).sibling(cell.getChildren().get(0)));
+				}
+				startIndex = i;				
 			}
+			
+			lastCharType = charType;
 
 			ActivatedCell charCell = new ActivatedChar(this.engine.getItem((int) sample.charAt(i)), signal, i);
 			buffer.add(charCell);
@@ -198,7 +211,7 @@ public class Context {
 	}
 
 	final Context runAndAdd(String sample) {
-		this.run(sample);
+		this.analyze(sample);
 		this.addNewSentence();
 		return this;
 	}
