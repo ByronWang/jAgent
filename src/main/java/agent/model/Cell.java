@@ -9,10 +9,17 @@ import util.TypeReader;
 import util.TypeWriter;
 
 public class Cell implements Savable {
-
+	enum CellType{
+		Char,
+		Word,
+		Sentence		
+	}
+	CellType type = CellType.Char;
+	
 	public static Cell newCharCell(int valueIndex) {
 		Cell charCell = new CharCell(valueIndex);
 		charCell.parents = new ArrayList<>();
+		charCell.type = CellType.Char;
 		return charCell;
 	}
 
@@ -20,6 +27,7 @@ public class Cell implements Savable {
 		Cell sentence = new Cell();
 		sentence.children = new java.util.ArrayList<Link>();
 		sentence.parents = new ArrayList<>();
+		sentence.type = CellType.Sentence;
 		return sentence;
 	}
 
@@ -27,6 +35,7 @@ public class Cell implements Savable {
 		Cell word = new Cell();
 		word.children = new ArrayList<>();
 		word.parents = new ArrayList<>();
+		word.type = CellType.Word;
 		return word;
 	}
 
@@ -34,6 +43,7 @@ public class Cell implements Savable {
 		Cell word = new Cell(valueIndex);
 		word.children = new ArrayList<>();
 		word.parents = new ArrayList<>();
+		word.type = CellType.Word;
 		return word;
 	}
 
@@ -108,7 +118,7 @@ public class Cell implements Savable {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		if (this.parents.size() != 0) {
+		if (this.type== CellType.Word) {
 			sb.append('[');
 			for (Link l : this.children) {
 				sb.append(l.from.toString());

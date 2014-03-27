@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import agent.model.Cell;
+import agent.model.CharCell;
 import agent.model.Engine;
 
 public class Context {
@@ -160,13 +161,26 @@ public class Context {
 
 	private Cell add() {
 		sentence = Cell.newSentence();
+
+		boolean stillRow = true;
+		for (int j = 0; j < buffer.size();j++) {
+			if(!(buffer.get(j).cell instanceof CharCell)){
+				stillRow = false;
+				break;
+			}
+		}
+		
+		if(stillRow){
+			Cell cell = createWord(buffer, 0, buffer.size());
+			buffer.set(0, buffer.get(0).sibling(cell.getChildren().get(0)));
+		}
+		
 		for (int j = 0; j < buffer.size();) {
 			Cell sc = buffer.get(j).cell();
 			sentence.comeFrom(sc);
 			j += sc.getLength();
 		}
 		this.engine.add(sentence);
-
 		return sentence;
 	}
 
