@@ -119,8 +119,8 @@ public class PersisterTextReaderWriter implements TypeReader, TypeWriter {
 	}
 
 	public void save(int v) throws IOException {
-//		w.write(v);
-//		w.write(";");
+		w.write(String.valueOf(v));
+		w.write(";");
 	}
 
 
