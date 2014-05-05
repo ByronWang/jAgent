@@ -1,0 +1,253 @@
+package util;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import agent.model.Engine;
+
+public class PersisterBinaryReaderWriter implements TypeReader, TypeWriter {
+	Log log = LogFactory.getLog(PersisterBinaryReaderWriter.class);
+
+	private static byte char0(char x) {
+		return (byte) (x);
+	}
+
+	private static byte char1(char x) {
+		return (byte) (x >> 8);
+	}
+
+	private static byte int0(int x) {
+		return (byte) (x & 0x7F);
+	}
+
+	private static byte int1(int x) {
+		return (byte) (x >> 7 & 0x7F);
+	}
+
+	private static byte int2(int x) {
+		return (byte) (x >> 14 & 0x7F);
+	}
+
+	private static byte int3(int x) {
+		return (byte) (x >> 21 & 0x7F);
+	}
+
+	// C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+	// /#region Visit Members
+
+	private static byte int4(int x) {
+		return (byte) (x >> 28 & 0x7F);
+	}
+
+	public static void load(String filename, Engine engine) {
+		new PersisterBinaryReaderWriter().doLoad(filename, engine);
+	}
+
+	// @formatter : off
+	static private char makeChar(byte b1, byte b0) {
+		return (char) ((b1 << 8) | (b0 & 0xff));
+	}
+
+	// static private int makeInt(byte b3, byte b2, byte b1, byte b0) {
+	// return (((b3) << 21) | ((b2 & 0xff) << 14) | ((b1 & 0xff) << 7) | ((b0 &
+	// 0xff)));
+	// }
+
+	static private short makeShort(byte b1, byte b0) {
+		return (short) ((b1 << 8) | (b0 & 0xff));
+	}
+
+	public static void save(String filename, Engine engine) {
+		new PersisterBinaryReaderWriter().doSave(filename, engine);
+	}
+
+	private static byte short0(short x) {
+		return (byte) (x);
+	}
+
+	private static byte short1(short x) {
+		return (byte) (x >> 8);
+	}
+
+	// private static byte int3(int x) { return (byte)(x >> 24); }
+	// private static byte int2(int x) { return (byte)(x >> 16); }
+	// private static byte int1(int x) { return (byte)(x >> 8); }
+	// private static byte int0(int x) { return (byte)(x ); }
+
+	byte[] buffer = new byte[1024];
+
+	public InputStream r = null;
+
+	public java.io.OutputStream w = null;
+
+	@Override
+	public void clearReader() throws IOException {
+
+	}
+
+	public void clearWrite() {
+	}
+
+	public void doLoad(String filename, Engine engine) {
+		try {
+			this.r = new FileInputStream(filename);
+			((TypeReader) this).clearReader();
+			((Savable) engine).load(engine, this);
+
+			this.r.close();
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void doSave(String filename, Engine engine) {
+		try {
+			this.w = new FileOutputStream(filename);
+
+			((Savable) engine).save(engine, this);
+
+			this.w.close();
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public byte readByte() throws IOException {
+		byte ret = (byte) r.read();
+//		if (log.isTraceEnabled()) {
+//			log.trace(ret);
+//		}
+		return ret;
+	}
+
+	public int readInt() throws IOException {
+		int b0 = r.read();
+		if (b0 < 0X80) {
+			return b0;
+		}
+		int b1 = (int) r.read();
+		if (b1 < 0X80) {
+			return (b1 << 7) | (b0 & 0x7F);
+		}
+
+		int b2 = (int) r.read();
+		if (b2 < 0X80) {
+			return (((b2) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+		}
+
+		int b3 = (int) r.read();
+		if (b3 < 0X80) {
+			return (((b3) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+		}
+
+		int b4 = (int) r.read();
+		int ret = (((b4) << 28) | ((b3 & 0x7F) << 21) | ((b2 & 0x7F) << 14) | ((b1 & 0x7F) << 7) | ((b0 & 0x7F)));
+
+//		if (log.isTraceEnabled()) {
+//			log.trace(ret);
+//		}
+
+		return ret;
+	}
+
+	public short readShort() throws IOException {
+		short ret = makeShort((byte) r.read(), (byte) r.read());
+//		if (log.isTraceEnabled()) {
+//			log.trace(ret);
+//		}
+		return ret;
+	}
+
+	public String readString() throws IOException {
+		// int cnt = readInt();
+		//
+		// StringBuilder sb = new StringBuilder(1024);
+		//
+		// for (int j = 0; j < cnt; j += 512) {
+		// int to = j + 512 > cnt ? cnt : j + 512;
+		// for (int i = j; i < to; i++) {
+		// char c = makeChar((byte) r.read(), (byte) r.read());
+		// sb.append(c);
+		// }
+		// j = to;
+		// }
+		//
+		// return sb.toString();
+		return null;
+	}
+
+	public void save(byte x) throws IOException {
+//		if (log.isTraceEnabled()) {
+//			log.trace(x);
+//		}
+		w.write(x);
+	}
+
+	public void save(int x) throws IOException {
+//		if (log.isTraceEnabled()) {
+//			log.trace(x);
+//		}
+
+		if (x < 0X80) {
+			w.write(int0(x));
+			return;
+		} else {
+			w.write(int0(x) | 0X80);
+		}
+		if (x < 0X4000) {
+			w.write(int1(x));
+			return;
+		} else {
+			w.write(int1(x) | 0X80);
+		}
+		if (x < 0X20000) {
+			w.write(int2(x));
+			return;
+		} else {
+			w.write(int2(x) | 0X80);
+		}
+
+		if (x < 0X10000000) {
+			w.write(int3(x));
+			return;
+		} else {
+			w.write(int3(x) | 0X80);
+			w.write(int4(x));
+		}
+	}
+
+	public void save(short x) throws IOException {
+//		if (log.isTraceEnabled()) {
+//			log.trace(x);
+//		}
+		w.write(short1(x));
+		w.write(short0(x));
+	}
+
+	public void save(String x) throws IOException {
+		// char[] ca = x.toCharArray();
+		// save(ca.length);
+		// for (int i = 0; i < ca.length; i++) {
+		// char c = ca[i];
+		// w.write(char1(c));
+		// w.write(char0(c));
+		// }
+	}
+
+}

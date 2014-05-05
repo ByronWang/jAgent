@@ -1,0 +1,16 @@
+#input{
+	height:  2em;;
+}
+
+#main{
+	
+}
+
+#mainHeader{
+	height: 1em;
+	border-bottom: gray solid 1px;
+}
+
+div{
+	padding: 0.5em;
+}
